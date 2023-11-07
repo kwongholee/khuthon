@@ -1,0 +1,25 @@
+{
+  "name": "khuthon",
+  "version": "1.0.0",
+  "description": "khuthon",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kwongholee/khuthon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kwongholee/khuthon/issues"
+  },
+  "homepage": "https://github.com/kwongholee/khuthon#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0"
+  }
+}
