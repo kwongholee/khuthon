@@ -5,6 +5,7 @@ import Book from './routes/Book';
 import Quiz from './routes/Quiz';
 import Wordlist from './routes/Wordlist';
 import LevelChange from './routes/LevelChange';
+import Register from './routes/Register';
 
 import {Routes, Route} from 'react-router-dom'
 
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Main></Main>}></Route>
         <Route path='/mypage/:userid' element={<MyPage></MyPage>}></Route>
+        <Route path='/register/:userid' element={<Register></Register>}></Route>
         <Route path='/book/:bookid' element={<Book></Book>}></Route>
         <Route path='/quiz/:userid' element={<Quiz></Quiz>}></Route>
         <Route path='/wordlist/:userid' element={<Wordlist></Wordlist>}></Route>
