@@ -8,7 +8,7 @@ export default function Main() {
   let [isLogged, setIsLogged] = useState(false)
   return(
     <div>
-      {!isLogged ? <Start isLogged={isLogged} setIsLogged={setIsLogged}></Start> : <MainPage isLogged={isLogged} setIsLogged={setIsLogged}></MainPage>}
+      <Start></Start>
     </div>
   )
 }
@@ -21,22 +21,13 @@ function Start(props) {
       <div className={style.login_container}>
         <img className={style.logo} src={'logo.png'}></img>
         <h1> Welcome! </h1>
-        <button className={style.login_button}
-        onClick={() => {
-          props.setIsLogged(true)
-          axios.post('/login')
-          .then((result) => {
-              if (result.data) {
-                  console.log('성공')
-              }
-              else { 
-                  console.log('실패')
-              }
-          })
-          .catch((err) => {
-              console.log(err)
-          })
+        <form method="GET" action="/login">
+          <button className={style.login_button}
+          onClick={() => {
+            props.setIsLogged(true)
+            
           }}>구글 계정으로 로그인</button>
+        </form>
       </div>
       
     </div>
@@ -52,7 +43,7 @@ function MainPage(props) {
             <div id='사진, 언어, 로그아웃' className={style.main_profile}>
               <button onClick={() => {
                 props.setIsLogged(false)
-                axios.post('/logout')
+                axios.get('/logout')
                 .then((result) => {
                     if (result.data) {
                         console.log('성공')
