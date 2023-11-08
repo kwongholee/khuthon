@@ -65,8 +65,26 @@ h1 {
   height: 100vh;
 }
 
+.main_first_container {
+  width: 1265px;
+  height: 314px;
+  background-color: aquamarine;
+}
+
+.main_logo {
+  width: 434px;
+  height: 179px;
+  background-color: darkorchid;
+}
 .main_profile {
-  width: 401px;
+  width: 434px;
   height: 135px;
   background-color: aqua;
+}
+
+.recent_book {
+  width: 831px;
+  height: 312px;
+  background: #FFF;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
 }

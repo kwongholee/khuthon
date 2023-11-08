@@ -45,26 +45,29 @@ function Start(props) {
 }
 function MainPage(props) {
   return (
-    <div id={style.main_background}> 
-      <div id='위에 div' style={{}}>
-        <div id='사진, 언어, 로그아웃' className={style.main_profile}>
-          <button onClick={() => {
-            props.setIsLogged(false)
-            axios.post('/logout')
-            .then((result) => {
-                if (result.data) {
-                    console.log('성공')
-                }
-                else { 
-                    console.log('실패')
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-            }}>Logout</button>
-        </div>
-        <div id='최근에 읽은 책'></div>   
+    <div className={style.main_background}> 
+      <div id='위에 div' className={style.main_first_container}>
+        <div>
+          <div className={style.main_logo}></div>
+            <div id='사진, 언어, 로그아웃' className={style.main_profile}>
+              <button onClick={() => {
+                props.setIsLogged(false)
+                axios.post('/logout')
+                .then((result) => {
+                    if (result.data) {
+                        console.log('성공')
+                    }
+                    else { 
+                        console.log('실패')
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+                }}>Logout</button>
+            </div>
+          </div>
+        <div id='최근에 읽은 책' className={style.recent_book}></div>   
       </div>
       <div id='아래 div'>
         <div id='책 추천 (레벨별)'></div>   
