@@ -1,14 +1,17 @@
-import style from '../css/main.module.css';
+import style from '../style/main.module.css';
+import Background from '../components/Background';
 
 export default function Main() {
   return(
     <div>
-      <div>
-        background-image
-      </div>
+      <Background></Background>
       
       <div>
-        Login Div
+        <div>
+          Logo
+          시작 문구!
+        </div>
+        <button>Login</button>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import style from '../css/quiz.module.css';
+import style from '../style/quiz.module.css';
 
 export default function Quiz() {
   return(

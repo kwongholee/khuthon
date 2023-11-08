@@ -1,4 +1,4 @@
-import style from '../css/wordlist.module.css';
+import style from '../style/wordlist.module.css';
 
 export default function Wordlist() {
   return(

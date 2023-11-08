@@ -4,7 +4,7 @@ import MyPage from './routes/MyPage';
 import Book from './routes/Book';
 import Quiz from './routes/Quiz';
 import Wordlist from './routes/Wordlist';
-import LevelChange from './routes/Levelchange';
+import LevelChange from './routes/LevelChange';
 
 import {Routes, Route} from 'react-router-dom'
 

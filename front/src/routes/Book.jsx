@@ -1,4 +1,4 @@
-import style from '../css/book.module.css';
+import style from '../style/book.module.css';
 
 export default function Book() {
   return(
