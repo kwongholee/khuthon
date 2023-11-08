@@ -18,7 +18,6 @@ function Start(props) {
   return (
     <div>
     <Background></Background>
-    
     <div>
       <div>
         Logo
@@ -26,7 +25,7 @@ function Start(props) {
       </div>
       <button onClick={() => {
         props.setIsLogged(true)
-        axios.post('/login')
+        axios.get('/login')
         .then((result) => {
             if (result.data) {
                 console.log('성공')
