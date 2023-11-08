@@ -10,7 +10,6 @@ const app = express();
 const MongoClient = require('mongodb').MongoClient
 const mongodb = require('mongodb');
 
-
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
 app.use(cors())
@@ -35,7 +34,7 @@ var db
 MongoClient.connect(process.env.DB,{useUnifiedTopology: true}, function(err, client){
     if (err) return console.log(err)
     db = client.db('khuthon')
-    app.listen(process.env.PORT_NUMBER, function(){
+    app.listen(process.env.PORT, function(){
         console.log('listening on 8080')
     })
 })
@@ -43,13 +42,12 @@ MongoClient.connect(process.env.DB,{useUnifiedTopology: true}, function(err, cli
 app.get('/login', passport.authenticate('google', {scope:['profile',
 'email']}))
 
-app.get('/login/redirect', passport.authenticate('google', {
-  failureRedirect: '/',
-}), async (req, res) => {
+app.get('/login/redirect', passport.authenticate('google'), async (req, res) => {
   try {
     db.collection('user').findOne({id:profile.id}, (err, result)=>{
       if (err) throw err
-      res.send({isLogined: "Logined", userid: req.user.id, image : req.user.profileImage, usertype : result.usertype})
+      if(result!= null)
+        res.send({isLogined: "Logined", userid: req.user.id, image : req.user.profileImage, usertype : result.usertype})
     })
   } catch (err) {
     res.status(401)
@@ -74,12 +72,21 @@ passport.use(
         callbackURL: '/login/redirect',
      },
      async (accessToken, refreshToken, profile, done)=>{
-        console.log(profile)
-        done(null,profile)
+        db.collection('user').findOne({id:profile.id}, (err, result)=>{
+          if (err) throw err
+          if (result == null){
+            done(null, false)
+          }
+          else{
+            done(null,profile)
+          }
+        })
      }
   )
 )
 
-app.get('*', (req,res) => {
-  res.send('~');
-})
+app.use(express.static(path.join(__dirname, 'front/build')));
+
+app.get('*', Logined, (req, res)=>{
+  res.sendFile(path.join(__dirname, '/front/build/index.html'));
+});    
