@@ -3,7 +3,7 @@
   background-position: center;
   width: 100%;
   height: 100vh;
-  animation: backgroundAnimation 20s linear infinite;
+  animation: backgroundAnimation 10s linear infinite;
 }
 
 @keyframes backgroundAnimation {
