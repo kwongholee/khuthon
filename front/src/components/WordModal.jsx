@@ -10,7 +10,6 @@ export default function WordModal() {
                 <h2>단어</h2>
                 <div><AiOutlineSound style={{cursor: 'pointer'}} /></div>
             </div>
-
             {
                 define.map((a,i) => {
                     return(

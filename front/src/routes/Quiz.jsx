@@ -13,7 +13,7 @@ export default function Quiz() {
         <ProfileImage></ProfileImage>
       </div>
 
-      <div className={style.background}>
+      <div className='background'>
         {1 == 0 ? <LeftBtn></LeftBtn> : null}
         <WordList></WordList>
         {1 == 0 ? <RightBtn></RightBtn> : null}
