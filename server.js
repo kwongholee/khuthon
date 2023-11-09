@@ -46,12 +46,10 @@ app.get('/login/redirect', passport.authenticate('google'), async (req, res) => 
     db.collection('user').findOne({id:req.user.id}, (err, result)=>{
       if (err) throw err
       if (result.usertype=="newuser"){
-        console.log(401)
-        res.status(401)
+        res.redirect('/register')
       }
       else{
-        console.log(200)
-        res.status(200)
+        res.redirect('/')
       }
     })
   } catch (err) {
@@ -60,20 +58,110 @@ app.get('/login/redirect', passport.authenticate('google'), async (req, res) => 
   }
 });
 
-function Logined(req,res, next){
+app.get('/authorization',(req,res)=>{
   if (req.user){
     res.send({isLogined: "Logined", userid: req.user.id})
-    next()
   }
   else{
     res.send({isLogined: "Not Logined", userid: null, image : null})
   }
-}
+})
+
+app.post('/register/profile/:userid',(req, res)=>{
+  if (req.body.name==null){
+    if (req.body.age == null){
+      if (req.body.lang== null){
+        res.status(400).send("닉네임, 연령대와 언어를 입력해주세요.")
+      }
+      else{
+        res.status(400).send("닉네임과 연령대를 입력해주세요.")
+      }
+    }
+    else{
+      if (req.body.lang== null){
+        res.status(400).send("닉네임과 언어를 입력해주세요.")
+      }
+      else{
+        res.status(400).send("닉네임을 입력해주세요.")
+      }
+    }
+  }
+  else{
+    if (req.body.age == null){
+      if (req.body.lang== null){
+        res.status(400).send("연령대와 언어를 입력해주세요.")
+      }
+      else{
+        res.status(400).send("연령대를 입력해주세요.")
+      }
+    }
+    else{
+      if (req.body.lang== null){
+        res.status(400).send("언어를 입력해주세요.")
+      }
+      else{
+        if (((req.body.name).length>10)){
+          res.status(400).send("닉네임은 10자 이하로 설정해주세요.")
+        }
+        else{
+          db.collection('user').updateOne({id:req.params.userid},{$set: 
+            {
+              name : req.body.name,
+              age : req.body.age,
+              lang : req.body.lang
+            }
+            })
+            res.status(200).send("프로필 생성 완료!")
+        }
+      }
+    }
+  }
+})
+
+app.get('/register/genre/:userid', (req, res)=>{
+  if((req.body.genre)!=3){
+    res.status(400).send("장르를 3개 선택해야 합니다!")
+  }
+  else{
+    db.collection('user').findOne({id:req.params.userid},{$set:{
+      genre: req.body.genre
+    }})
+    res.status(200).send("선호 장르 등록 완료!")
+  }
+})
+
+app.get('/logout', (req, res, next) => {
+  req.logOut(err => {
+    if (err) {
+      return next(err);
+    } else {
+      console.log('로그아웃됨')
+    }
+  });
+});
+
+app.get('/mypage:userid', (req,res)=>{
+  db.collection('user').findOne({id:req.params.userid}, (req,result)=>{
+    user = result
+  })
+  
+  res.send({
+    "user": {
+      "name":user.name,
+      "age" : user.age,
+      "lang" : user.lang,
+      "level" : user.level,
+      "userId" : user.id
+    },
+    "book": []
+  })
+})
 
 function register(data){
   db.collection('user').insertOne({
     id : data.id,
     name : "",
+    age : 0,
     level : null,
     language : null,
     genre : [],
@@ -109,6 +197,6 @@ passport.use(
 
 app.use(express.static(path.join(__dirname, 'front/build')));
 
-app.get('*', Logined, (req, res)=>{
+app.get('*', (req, res)=>{
   res.sendFile(path.join(__dirname, '/front/build/index.html'));
 });    
