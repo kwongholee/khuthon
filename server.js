@@ -136,12 +136,12 @@ app.put('/register/profile/:userid',(req, res)=>{
 })
 
 app.put('/register/genre/:userid', (req, res)=>{
-  if((req.body.genre)!=3){
+  if((req.body).length!=3){
     res.status(400).send("장르를 3개 선택해야 합니다!")
   }
   else{
-    db.collection('user').findOne({id:req.params.userid},{$set:{
-      genre: req.body.genre
+    db.collection('user').updateOne({id:req.params.userid},{$set:{
+      genre: req.body
     }})
     res.status(200).send("선호 장르 등록 완료!")
   }
@@ -280,6 +280,39 @@ app.put('/book/:userid/:bookid', (req,res)=>{
   })
 })
 
+var startTime = 0
+
+app.post('/book', (req,res)=>{
+  var startTime = new Date()
+  res.status(200)
+})
+
+app.post('/book/word/:userid/:bookid',(req,res)=>{
+  wordList = req.body.wordList
+  if(wordList.length==0 || wordList.length>10){
+    res.status(400)
+  }
+  else{
+    for(i=0; i<wordList.length; i++){
+      
+      db.collection('word').insertOne({
+        word: wordList[i],
+        bookId: req.params.bookid,
+        userId : req.params.userid,
+        level : ""
+      })
+    }
+  }
+})
+
+app.get('/book/word/{userid}/{bookid}',(req,res)=>{
+  var endTime = new Date();
+  var executionTime = endTime - startTime;
+  var executionTimeInSeconds = executionTime / 1000; //초
+  var executionTimeInMinutes = executionTime / (1000 * 60);//분
+  res.send({"time": executionTime})
+})
+
 function register(data){
   db.collection('user').insertOne({
     id : data.id,
@@ -287,7 +320,7 @@ function register(data){
     profileImage : 0,
     age : 0,
     level : null,
-    language : null,
+    lang : null,
     genre : [],
     levelBook: [],
     genreBook : [],
