@@ -39,6 +39,12 @@ MongoClient.connect(process.env.DB,{useUnifiedTopology: true}, function(err, cli
     })
 })
 
+app.get('/main',(req, res)=>{
+  db.collection('user').findOne({id:req.user.id}, (err,result)=>{
+    res.send(result)
+  })
+})
+
 app.get('/login', passport.authenticate('google', {scope:['profile']}))
 
 app.get('/login/redirect', passport.authenticate('google'), async (req, res) => {
@@ -46,7 +52,7 @@ app.get('/login/redirect', passport.authenticate('google'), async (req, res) => 
     db.collection('user').findOne({id:req.user.id}, (err, result)=>{
       if (err) throw err
       if (result.usertype=="newuser"){
-        res.redirect('/register')
+        res.redirect(`/register/profile/${req.user.id}`)
       }
       else{
         res.redirect('/main')
@@ -140,22 +146,44 @@ app.get('/logout', (req, res, next) => {
   });
 });
 
-app.get('/mypage:userid', (req,res)=>{
-  db.collection('user').findOne({id:req.params.userid}, (req,result)=>{
-    user = result
-  })
-  
-  res.send({
-    "user": {
-      "name":user.name,
-      "age" : user.age,
-      "lang" : user.lang,
-      "level" : user.level,
-      "userId" : user.id
-    },
-    "book": []
+app.get('/mypage/:userid', (req,res)=>{
+  db.collection('user').findOne({id:req.params.userid}, (err,res2)=>{
+    result  = res2
+    book = result.book
+    bookArray = []
+      for (i=0; i<book.length; i++){
+        db.collection('book').findOne({id:book[i]}, (err, res2)=>{
+          foundBook = res2
+        })
+        bookArray.push({
+          "bookId" : book[i].bookId,
+          "title" : foundBook.title,
+          "date": book[i].date,
+          "bookImage" :foundBook.bookImage
+        })
+      }
+    db.collection('quiz').find({userId: req.params.userid}).limit(2).toArray((err,res3)=>{
+      quizArray = res3
+      db.collection('word').find({userId: req.params.userid}).limit(6).toArray((err,res4)=>{
+        wordArray = res4.map(doc => doc.word)
+        res.send({
+          "user": {
+            "name":result.name,
+            "age" : result.age,
+            "lang" : result.lang,
+            "level" : result.level,
+            "userId" : result.id
+          },
+          "book": bookArray,
+          "quiz" : quizArray,
+          "word" : wordArray
+        })
+      })
+    })
   })
 })
+
+
 
 function register(data){
   db.collection('user').insertOne({
