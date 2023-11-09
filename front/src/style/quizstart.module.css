@@ -1,16 +1,27 @@
-.background {
-  background-color: antiquewhite;
-}
-
 .content {
+  margin: auto;
+  width: 1000px;
+  height: 659px;
   background-color: white;
   border: black 2px solid;
   border-radius: 10px;
 }
 
+.leftDiv {
+  float: left;
+  width: 40%;
+  height: 100%;
+}
+.rightDiv {
+  display: flex;
+  float: right;
+  width: 60%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .bookTitle {
-  width: 1000px;
-  height: 659px;
   color: #000;
   text-align: center;
   font-family: Inter;
@@ -24,10 +35,12 @@
   background-color: #D9D9D9;
   width: 500px;
   height: 367px;
+  margin: auto;
 }
 
 .startBtn {
   display: flex;
+  margin: auto;
   flex-direction: column;
   justify-content: center;
   width: 250px;

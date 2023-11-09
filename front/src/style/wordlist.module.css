@@ -14,11 +14,10 @@
     justify-content: center;
     flex-direction: column;
 }
-.searchBtn:hover {
-    
-}
 
 .wordTable {
+    width: 916px;
+    height: 278px;
     display: flex;
     margin: auto;
     justify-content: center;

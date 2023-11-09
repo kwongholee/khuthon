@@ -1,8 +1,11 @@
 import style from '../style/quizstart.module.css';
 import Logo from '../components/Logo';
 import ProfileImage from '../components/ProfileImage';
+import { useNavigate } from 'react-router-dom';
 
 export default function QuizStart() {
+  let navigate = useNavigate();
+
   return(
     <div>
       <div>
@@ -10,12 +13,16 @@ export default function QuizStart() {
         <ProfileImage></ProfileImage>
       </div>
 
-      <div className={style.background}>
+      <div className='background'>
         <div className={style.content}>
-          <div>책 표지</div>
-          <div className={style.bookTitle}>책 제목</div>
-          <div className={style.wordlist}>단어장</div>
-          <div className={style.startBtn}>시작</div>
+          <div className={style.leftDiv}>
+            <img src="/" />
+            <div className={style.bookTitle}>책 제목</div>
+          </div>
+          <div className={style.rightDiv}>
+            <div className={style.wordlist}>단어장</div>
+            <div className={style.startBtn} onClick={() => {navigate('/quiz/')}}>시작</div>
+          </div>
         </div>
       </div>
     </div>

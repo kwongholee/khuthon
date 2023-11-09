@@ -1,3 +1,4 @@
+import '../App.css'
 import style from '../style/quiz.module.css';
 import WordList from '../components/WordList';
 import Logo from '../components/Logo';
