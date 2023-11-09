@@ -29,7 +29,6 @@ passport.deserializeUser((id, done)=> {
       done(null,result)
   })
 }); 
-
 var db
 MongoClient.connect(process.env.DB,{useUnifiedTopology: true}, function(err, client){
     if (err) return console.log(err)
@@ -74,54 +73,68 @@ app.get('/authorization',(req,res)=>{
 })
 
 app.post('/register/profile/:userid',(req, res)=>{
-  if (req.body.name==null){
-    if (req.body.age == null){
-      if (req.body.lang== null){
-        res.status(400).send("닉네임, 연령대와 언어를 입력해주세요.")
+  button = req.query.button
+  if (button == "prev"){
+    db.collection('user').deleteOne({id:req.user.id},(err,result)=>{
+      if (err) throw err
+    })
+    req.logOut(err => {
+      if (err) {
+        return next(err);
       }
-      else{
-        res.status(400).send("닉네임과 연령대를 입력해주세요.")
-      }
-    }
-    else{
-      if (req.body.lang== null){
-        res.status(400).send("닉네임과 언어를 입력해주세요.")
-      }
-      else{
-        res.status(400).send("닉네임을 입력해주세요.")
-      }
-    }
+    });
   }
   else{
-    if (req.body.age == null){
-      if (req.body.lang== null){
-        res.status(400).send("연령대와 언어를 입력해주세요.")
+    if (req.body.name==null){
+      if (req.body.age == null){
+        if (req.body.lang== null){
+          res.status(400).send("닉네임, 연령대와 언어를 입력해주세요.")
+        }
+        else{
+          res.status(400).send("닉네임과 연령대를 입력해주세요.")
+        }
       }
       else{
-        res.status(400).send("연령대를 입력해주세요.")
+        if (req.body.lang== null){
+          res.status(400).send("닉네임과 언어를 입력해주세요.")
+        }
+        else{
+          res.status(400).send("닉네임을 입력해주세요.")
+        }
       }
     }
     else{
-      if (req.body.lang== null){
-        res.status(400).send("언어를 입력해주세요.")
-      }
-      else{
-        if (((req.body.name).length>10)){
-          res.status(400).send("닉네임은 10자 이하로 설정해주세요.")
+      if (req.body.age == null){
+        if (req.body.lang== null){
+          res.status(400).send("연령대와 언어를 입력해주세요.")
         }
         else{
-          db.collection('user').updateOne({id:req.params.userid},{$set: 
-            {
-              name : req.body.name,
-              age : req.body.age,
-              lang : req.body.lang
-            }
-            })
-            res.status(200).send("프로필 생성 완료!")
+          res.status(400).send("연령대를 입력해주세요.")
+        }
+      }
+      else{
+        if (req.body.lang== null){
+          res.status(400).send("언어를 입력해주세요.")
+        }
+        else{
+          if (((req.body.name).length>10)){
+            res.status(400).send("닉네임은 10자 이하로 설정해주세요.")
+          }
+          else{
+            db.collection('user').updateOne({id:req.params.userid},{$set: 
+              {
+                name : req.body.name,
+                age : req.body.age,
+                lang : req.body.lang
+              }
+              })
+              res.status(200).send("프로필 생성 완료!")
+          }
         }
       }
     }
   }
+  
 })
 
 app.get('/register/genre/:userid', (req, res)=>{
@@ -169,6 +182,7 @@ app.get('/mypage/:userid', (req,res)=>{
         res.send({
           "user": {
             "name":result.name,
+            "profileImage":result.profileImage,
             "age" : result.age,
             "lang" : result.lang,
             "level" : result.level,
@@ -183,7 +197,58 @@ app.get('/mypage/:userid', (req,res)=>{
   })
 })
 
+app.get('/wordlist/:userid', (req, res)=>{
+  page = req.query.page
+  db.collection('word').find({userId: req.params.userid}).skip((page-1)*10).limit(10).toArray((err,result)=>{
+    wordArray = []
+    for (i=0; i<result.length; i++){
+      wordArray.push({"word":result[i].word[0], "wordId":result[i]._id})
+    }
+    res.send({"wordList":wordArray})
+  })
+})
 
+app.put('/quiz/result/:quizid', (req, res)=>{
+now = new Date();
+year = now.getFullYear();
+month = now.getMonth() + 1;
+day = now.getDate();
+date = (`${year}-${month}-${day}`);
+  db.collection('quiz').updateOne({_id: req.params.quizid},{$set: {
+    "rightNum" : req.body.rightNum,
+    "totalNum" : req.body.totalNum,
+    "wordList" : req.body.result,
+    "date" : date
+  }}, (err, result)=>{
+    if (err) throw err
+})
+})
+
+app.get('/quiz/:bookid', (req, res)=>{
+  db.collection('book').findOne({_id:req.params.bookid}, (err, result)=>{
+    res.send({"title":result.title, "bookImage":result.bookImage})
+  })
+})
+
+app.get('/quiz/:userid', (req,res)=>{
+  page = req.query.page
+  db.collection('quiz').find({userId : req.params.userid}).skip((page-1)*4).limit(4).toArray((err,result)=>{
+    if(result){
+      res.send({
+        "quiz" : [{
+          "date" : result.date,
+          "title" : "노인과 바다",
+          "wordList" :[{"word":"노인","right":true},
+                    {"word":"바다","right":false}],
+          
+        }]
+      })
+    }
+    else{
+      res.status(400)
+    }
+  })
+})
 
 function register(data){
   db.collection('user').insertOne({
