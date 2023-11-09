@@ -11,6 +11,7 @@
     width: 600px;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 .profile {
     width: 248px;
@@ -51,7 +52,7 @@
 .age_container {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 .age_p {
@@ -89,7 +90,7 @@
 .language_button {
     width: 195px;
     height: 53px;
-    margin: 0 -10px 0 -10px;
+    margin: 0 10px 0 10px;
     color: black;
     background-color: white;
     border: #83B099 2px solid;
@@ -107,6 +108,7 @@
 .complete_button {
     width: 195px;
     height: 70px;
+    margin: 0 10px 0 10px;
     border-radius: 10px;
     background: #E0D2B8;
     color: #000;
