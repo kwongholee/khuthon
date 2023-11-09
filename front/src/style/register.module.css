@@ -91,11 +91,18 @@
     height: 53px;
     margin: 0 -10px 0 -10px;
     color: black;
+    background-color: white;
+    border: #83B099 2px solid;
     text-align: center;
     font-family: Inter;
     font-size: 30px;
     font-weight: 700;
 }
+
+.language_button:focus {
+    background-color: #83B099;
+    color: white;
+} 
 
 .complete_button {
     width: 195px;
