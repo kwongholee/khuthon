@@ -1,0 +1,70 @@
+.bookTitle {
+    margin: auto;
+    display: flex;
+    width: 500px;
+    height: 100px;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 0px 0px 10px 10px;
+    border: 2px solid #000;
+    background: #FFF;
+    color: #000;
+    text-align: center;
+    font-family: Inter;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.box {
+    display: flex;
+    margin: auto;
+    width: 1000px;
+    height: 250px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    border: 2px solid #000;
+    background: #FFF;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.pagebar {
+    text-align: center;
+    display: flex;
+    margin: auto;
+    width: 150px;
+    height: 50px;
+    flex-shrink: 0;
+    border-radius: 10px 10px 0px 0px;
+    border: 2px solid #000;
+    background: #D9D9D9;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.completeBtn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 10px;
+    width: 150px;
+    height: 75px;
+    cursor: pointer;
+    text-align: center;
+    border: #83B099 2px solid;
+    color: #000;
+    text-align: center;
+    font-family: Inter;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+.completeBtn:hover {
+    background-color: #83B099;
+    color: white;
+} 
