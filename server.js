@@ -63,7 +63,7 @@ app.get('/login/redirect', passport.authenticate('google'), async (req, res) => 
   }
 });
 
-app.gett('/authorization',(req,res)=>{
+app.get('/authorization',(req,res)=>{
   if (req.user){
     res.send({isLogined: "Logined", userid: req.user.id})
   }
