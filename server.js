@@ -63,7 +63,7 @@ app.get('/login/redirect', passport.authenticate('google'), async (req, res) => 
   }
 });
 
-app.gett('/authorization',(req,res)=>{
+app.get('/authorization',(req,res)=>{
   if (req.user){
     res.send({isLogined: "Logined", userid: req.user.id})
   }
@@ -78,11 +78,9 @@ app.put('/register/profile/:userid',(req, res)=>{
     db.collection('user').deleteOne({id:req.user.id},(err,result)=>{
       if (err) throw err
     })
-    req.logOut(err => {
-      if (err) {
-        return next(err);
-      }
-    });
+    req.session.destroy()
+    res.clearCookie('connect.sid');
+    res.send("session destroyed")
   }
   else{
     if (req.body.name==null){
@@ -138,11 +136,11 @@ app.put('/register/profile/:userid',(req, res)=>{
 })
 
 app.put('/register/genre/:userid', (req, res)=>{
-  if((req.body.genre)!=3){
+  if((req.body).length!=3){
     res.status(400).send("장르를 3개 선택해야 합니다!")
   }
   else{
-    db.collection('user').findOne({id:req.params.userid},{$set:{
+    db.collection('user').updateOne({id:req.params.userid},{$set:{
       genre: req.body.genre
     }})
     res.status(200).send("선호 장르 등록 완료!")
@@ -289,7 +287,7 @@ function register(data){
     profileImage : 0,
     age : 0,
     level : null,
-    language : null,
+    lang : null,
     genre : [],
     levelBook: [],
     genreBook : [],

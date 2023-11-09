@@ -23,6 +23,8 @@
     align-items: center;
     flex-direction: column;
     margin-top: 20px;
+    width: 495px;
+    height: 128px;
 }
 
 .input_name {
@@ -47,12 +49,23 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    margin-bottom: 0
+}
+
+.good_name {
+    color: rgb(5, 195, 24);
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 0
 }
 
 .age_container {
     display: flex;
     justify-content: center;
-    /* margin-top: 20px; */
+    margin-bottom: 30px;
 }
 
 .age_p {
@@ -81,10 +94,12 @@
     line-height: normal;
 }
 
+.language {
+    height: 100px;
+}
 .language_container {
     display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
+    justify-content: center;
 }
 
 .language_button {
