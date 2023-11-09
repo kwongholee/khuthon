@@ -21,7 +21,8 @@ function App() {
         <Route path='/' element={<Login></Login>}></Route>      
         <Route path='/main' element={<Main></Main>}></Route>      
         <Route path='/mypage/:userid' element={<MyPage></MyPage>}></Route>
-        <Route path='/register/profile' element={<Register></Register>}></Route>
+        <Route path='/register/profile/:userid' element={<Register></Register>}></Route>
+        <Route path='/register/genre/:userid' element={<Genre/>}></Route>
         <Route path='/register/genre' element={<Genre/>}></Route>
         <Route path='/book/:bookid' element={<Book></Book>}></Route>
         <Route path='/quiz/:userid' element={<QuizDetail></QuizDetail>}></Route>

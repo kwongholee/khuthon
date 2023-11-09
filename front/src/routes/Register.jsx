@@ -8,26 +8,27 @@ export default function Register() {
 
   // const nickname = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]{1,10}$/
   
-  let [nickname, setNickname] = useState('hi')
+  let [nickname, setNickname] = useState('')
   let [age, setAge] = useState('')
   let [language, setLanguage] = useState('')
   let [userId, setUserId] = useState('')
   let navigate = useNavigate()
 
-  const fetchUserId = () => {
-    axios.get('/authorization')  
-            .then((res) => { 
-                setUserId(res.data)
-                console.log(userId)
-            })
-            .catch((err) => {
-                console.log(err) 
-        })
-  }
+  const fetchUserId = async () => {
+    try {
+      const response = await axios.get('/authorization');
+      const userId = response.data.userid; // res.userid 대신 res.data.userid를 사용합니다.
+      setUserId(userId);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     fetchUserId()
   },[])
+
+  const onSelect = (e) => {setAge(e.target.value)}
 
   return (
     <div className={style.container}>
@@ -43,15 +44,16 @@ export default function Register() {
         </div>
         <div className={style.age_container}>
           <p className={style.age_p}>연령</p>
-          <select className={style.age_select}>
-            <option>10세 이하</option>
-            <option>10대</option>
-            <option>20대</option>
-            <option>30대</option>
-            <option>40대</option>
-            <option>50대</option>
-            <option>60대</option>
-            <option>70세 이상</option>
+          <select className={style.age_select}
+            value = {age} onChange={onSelect}>
+            <option value="0">10세 이하</option>
+            <option value="10">10대</option>
+            <option value="20">20대</option>
+            <option value="30">30대</option>
+            <option value="40">40대</option>
+            <option value="50">50대</option>
+            <option value="60">60대</option>
+            <option value="70">70세 이상</option>
           </select>
         </div>
         <div className={style.language_container}>
@@ -61,25 +63,34 @@ export default function Register() {
           onClick={() => {setLanguage('영어')}}>영어</button>
         </div>
         <div className={style.language_container}>
-          <button className={style.complete_button}
+          {/* <button className={style.complete_button}
           onClick={() => {
-            axios.post(`/register/profile`)
+            axios.post(`/register/profile/${userId}`)
             .then((res) => {
                 navigate(`/`)
             })
             .catch((err) => {
                 console.log(err)
             })
-          }}>이전</button>
+          }}>이전</button> */}
           <button className={style.complete_button}
           onClick={() => {
-            axios.post(`/register/profile`)
-            .then((res) => {
-                navigate(`/register/genre`)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+            if(nickname!='' && language!='') {
+              const newUser = {
+                name : nickname,
+                age : age,
+                lang : language
+              }
+              console.log(newUser)
+
+              axios.post(`/register/profile/${userId}`, newUser)
+              .then((res) => {
+                navigate(`/register/genre/${userId}`)
+              })
+              .catch((err) => {
+                  console.log(err)
+              })
+            }
           }}>다음</button>
         </div>
       </div>
