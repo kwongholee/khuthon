@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from '../style/register.module.css';
 import Logo from '../components/Logo';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Register() {
 
@@ -8,8 +10,24 @@ export default function Register() {
   
   let [nickname, setNickname] = useState('hi')
   let [age, setAge] = useState('')
-  let [language, setLanguage] = useState('한국어')
+  let [language, setLanguage] = useState('')
+  let [userId, setUserId] = useState('')
+  let navigate = useNavigate()
 
+  const fetchUserId = () => {
+    axios.get('/authorization')  
+            .then((res) => { 
+                setUserId(res.data)
+                console.log(userId)
+            })
+            .catch((err) => {
+                console.log(err) 
+        })
+  }
+
+  useEffect(() => {
+    fetchUserId()
+  },[])
 
   return (
     <div className={style.container}>
@@ -37,12 +55,32 @@ export default function Register() {
           </select>
         </div>
         <div className={style.language_container}>
-          <button className={style.language_button}>한국어</button>
-          <button className={style.language_button}>영어</button>
+          <button className={style.language_button}
+          onClick={() => {setLanguage('한국어')}}>한국어</button>
+          <button className={style.language_button}
+          onClick={() => {setLanguage('영어')}}>영어</button>
         </div>
         <div className={style.language_container}>
-          <button className={style.complete_button}>이전</button>
-          <button className={style.complete_button} onClick={() => {console.log(nickname)}}>다음</button>
+          <button className={style.complete_button}
+          onClick={() => {
+            axios.post(`/register/profile`)
+            .then((res) => {
+                navigate(`/`)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+          }}>이전</button>
+          <button className={style.complete_button}
+          onClick={() => {
+            axios.post(`/register/profile`)
+            .then((res) => {
+                navigate(`/register/genre`)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+          }}>다음</button>
         </div>
       </div>
 
