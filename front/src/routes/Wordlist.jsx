@@ -4,6 +4,8 @@ import ProfileImage from '../components/ProfileImage';
 import Word from '../components/Word';
 import { useState } from 'react';
 import {FaSearch} from 'react-icons/fa'
+import LeftBtn from '../components/LeftBtn';
+import RightBtn from '../components/RightBtn';
 
 export default function Wordlist() {
   let [word, setWord] = useState([]);
@@ -15,6 +17,9 @@ export default function Wordlist() {
         <ProfileImage></ProfileImage>
       </div>
 
+      {1 == 0 ? <LeftBtn></LeftBtn> : null}
+      {1 == 0 ? <RightBtn></RightBtn> : null}
+
       <div>
         <div style={{margin: 'auto'}}>
           <input type="text" className={style.searchInput} />
@@ -25,8 +30,8 @@ export default function Wordlist() {
 
         <div>
           <div className={style.wordTable}>
-            word
-            meaning
+            <div>WORD</div>
+            <div>MEANING</div>
           </div>
           {
             word.map((a,i) => {

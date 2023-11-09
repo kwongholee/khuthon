@@ -1,6 +1,8 @@
 import style from '../style/quizdetail.module.css'
 import Logo from "../components/Logo"
 import ProfileImage from "../components/ProfileImage"
+import LeftBtn from '../components/LeftBtn';
+import RightBtn from '../components/RightBtn';
 
 export default function QuizDetail() {
     return(
@@ -17,10 +19,10 @@ export default function QuizDetail() {
                 </div>
 
                 <div>
-                    <div>왼쪽 화살표 btn</div>
+                    {1 == 0 ? <LeftBtn></LeftBtn> : null}
                     <div className={style.box}>quiz</div>
                     <div className={style.box}>answer</div>
-                    <div>오른쪽 화살표 버튼</div>
+                    {1 == 0 ? <RightBtn></RightBtn> : null}
                 </div>
 
                 <div> 

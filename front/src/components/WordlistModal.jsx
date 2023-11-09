@@ -8,7 +8,7 @@ export default function WordlistModal() {
         <div>
             <div>
                 <h2>단어</h2>
-                <div><AiOutlineSound /></div>
+                <div><AiOutlineSound style={{cursor: 'pointer'}} /></div>
             </div>
 
             {
