@@ -33,7 +33,7 @@ export default function Register() {
   return (
     <div className={style.container}>
       <Logo></Logo>
-      <div>
+      <div style={{display:'flex', justifyContent:'center', alignItems:'center', flexDirection:'column'}}>
         <div className={style.profile_container}>
           <img className={style.profile}></img>
         </div>
@@ -63,26 +63,26 @@ export default function Register() {
           onClick={() => {setLanguage('영어')}}>영어</button>
         </div>
         <div className={style.language_container}>
-          {/* <button className={style.complete_button}
+          <button className={style.complete_button}
           onClick={() => {
-            axios.post(`/register/profile/${userId}`)
+            axios.post(`/register/profile/${userId}`, {button : 'prev'})
             .then((res) => {
                 navigate(`/`)
             })
             .catch((err) => {
                 console.log(err)
             })
-          }}>이전</button> */}
+          }}>이전</button>
           <button className={style.complete_button}
           onClick={() => {
             if(nickname!='' && language!='') {
               const newUser = {
                 name : nickname,
                 age : age,
-                lang : language
+                lang : language,
+                button: 'next'
               }
               console.log(newUser)
-
               axios.post(`/register/profile/${userId}`, newUser)
               .then((res) => {
                 navigate(`/register/genre/${userId}`)
