@@ -2,8 +2,9 @@ import style from '../style/main.module.css';
 import Background from '../components/Background';
 import { useState } from 'react';
 import axios from "axios"
-// import logo from '../../public/logo.png'
 
+
+//userid 묻는 get 요청 하나 쏘기, 등록하면 post도 쏘기
 export default function Main() {
   let [isLogged, setIsLogged] = useState(false)
   return(
