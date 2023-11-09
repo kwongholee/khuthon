@@ -10,7 +10,15 @@ export default function QuizResult() {
       </div>
 
       <div>
-        
+        <div>
+          <div>book title</div>
+          <div>quiz result</div>
+        </div>
+
+        <div>
+          <p>날짜</p>
+          <div>완료</div>
+        </div>
       </div>
     </div>
   )
