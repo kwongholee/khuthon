@@ -78,11 +78,9 @@ app.put('/register/profile/:userid',(req, res)=>{
     db.collection('user').deleteOne({id:req.user.id},(err,result)=>{
       if (err) throw err
     })
-    req.logOut(err => {
-      if (err) {
-        return next(err);
-      }
-    });
+    req.session.destroy()
+    res.clearCookie('connect.sid');
+    res.send("session destroyed")
   }
   else{
     if (req.body.name==null){

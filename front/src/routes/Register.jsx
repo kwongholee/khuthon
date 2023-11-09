@@ -65,8 +65,10 @@ export default function Register() {
         <div className={style.language_container}>
           <button className={style.complete_button}
           onClick={() => {
-            axios.post(`/register/profile/${userId}`, {button : 'prev'})
+            axios.put(`/register/profile/${userId}`, {button : 'prev'})
             .then((res) => {
+              console.log(res.status)
+              console.log('hello')
                 navigate(`/`)
             })
             .catch((err) => {
@@ -83,7 +85,7 @@ export default function Register() {
                 button: 'next'
               }
               console.log(newUser)
-              axios.post(`/register/profile/${userId}`, newUser)
+              axios.put(`/register/profile/${userId}`, newUser)
               .then((res) => {
                 navigate(`/register/genre/${userId}`)
               })
