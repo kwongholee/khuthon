@@ -24,6 +24,7 @@ function App() {
         <Route path='/register/profile' element={<Register></Register>}></Route>
         <Route path='/register/genre' element={<Genre/>}></Route>
         <Route path='/book/:bookid' element={<Book></Book>}></Route>
+        <Route path='/quiz' element={<Quiz></Quiz>}></Route>
         <Route path='/quiz/:userid' element={<QuizDetail></QuizDetail>}></Route>
         <Route path='/quiz/:userid/:bookid' element={<QuizStart></QuizStart>}></Route>
         <Route path='/wordlist/:userid' element={<Wordlist></Wordlist>}></Route>

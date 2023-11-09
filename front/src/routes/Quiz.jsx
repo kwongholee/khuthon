@@ -2,6 +2,8 @@ import style from '../style/quiz.module.css';
 import WordList from '../components/WordList';
 import Logo from '../components/Logo';
 import ProfileImage from '../components/ProfileImage';
+import LeftBtn from '../components/LeftBtn';
+import RightBtn from '../components/RightBtn';
 
 export default function Quiz() {
   return(
@@ -11,10 +13,10 @@ export default function Quiz() {
         <ProfileImage></ProfileImage>
       </div>
 
-      <div style={{background: '#'}}>
-        <div>왼쪽 화살표 이동</div>
+      <div className={style.background}>
+        <LeftBtn></LeftBtn>
         <WordList></WordList>
-        <div>오른쪽 화살표 이동</div>
+        <RightBtn></RightBtn>
       </div>
     </div>
   )

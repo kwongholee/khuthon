@@ -1,7 +1,7 @@
 import { useState } from "react"
 import {AiOutlineSound} from 'react-icons/ai'
 
-export default function WordModal() {
+export default function WordlistModal() {
     let [define, setDefine] = useState([]);
 
     return(
