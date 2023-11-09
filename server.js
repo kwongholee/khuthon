@@ -63,7 +63,7 @@ app.get('/login/redirect', passport.authenticate('google'), async (req, res) => 
   }
 });
 
-app.get('/authorization',(req,res)=>{
+app.gett('/authorization',(req,res)=>{
   if (req.user){
     res.send({isLogined: "Logined", userid: req.user.id})
   }
@@ -72,7 +72,7 @@ app.get('/authorization',(req,res)=>{
   }
 })
 
-app.post('/register/profile/:userid',(req, res)=>{
+app.put('/register/profile/:userid',(req, res)=>{
   button = req.body.button
   if (button == "prev"){
     db.collection('user').deleteOne({id:req.user.id},(err,result)=>{
@@ -137,7 +137,7 @@ app.post('/register/profile/:userid',(req, res)=>{
   
 })
 
-app.get('/register/genre/:userid', (req, res)=>{
+app.put('/register/genre/:userid', (req, res)=>{
   if((req.body.genre)!=3){
     res.status(400).send("장르를 3개 선택해야 합니다!")
   }
