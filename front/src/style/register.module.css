@@ -1,0 +1,26 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+}
+
+.profile {
+    width: 248px;
+    height: 248px;
+}
+
+.name_container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 44px;
+}
+
+.input_name {
+    width: 495px;
+    height: 53px;
+    border-bottom: 1px white solid;
+}
