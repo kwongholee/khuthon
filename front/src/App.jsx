@@ -8,6 +8,9 @@ import Wordlist from './routes/Wordlist';
 import LevelChange from './routes/LevelChange';
 import Register from './routes/Register';
 import Genre from './routes/Genre';
+import QuizDetail from './routes/QuizDetail';
+import QuizStart from './routes/QuizStart';
+import QuizResult from './routes/QuizResult';
 
 import {Routes, Route} from 'react-router-dom'
 
@@ -21,7 +24,8 @@ function App() {
         <Route path='/register/profile' element={<Register></Register>}></Route>
         <Route path='/register/genre' element={<Genre/>}></Route>
         <Route path='/book/:bookid' element={<Book></Book>}></Route>
-        <Route path='/quiz/:userid' element={<Quiz></Quiz>}></Route>
+        <Route path='/quiz/:userid' element={<QuizDetail></QuizDetail>}></Route>
+        <Route path='/quiz/:userid/:bookid' element={<QuizStart></QuizStart>}></Route>
         <Route path='/wordlist/:userid' element={<Wordlist></Wordlist>}></Route>
         <Route path='/level-change/:userid' element={<LevelChange></LevelChange>}></Route>
       </Routes>

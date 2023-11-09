@@ -12,11 +12,18 @@ export default function Wordlist() {
 
       <div>
         <div>
-          검색창
+          <input type="text" />
+          <div>검색 버튼</div>
         </div>
 
         <div>
-          단어장
+          <div>
+            word
+            meaning
+          </div>
+          <div>
+            
+          </div> 
         </div>
       </div>
     </div>
