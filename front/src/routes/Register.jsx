@@ -1,8 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import style from '../style/register.module.css';
 import Logo from '../components/Logo';
 
 export default function Register() {
+
+  // const nickname = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]{1,10}$/
+  
+  let [nickname, setNickname] = useState('hi')
+  let [age, setAge] = useState('')
+  let [language, setLanguage] = useState('한국어')
+
+
   return (
     <div className={style.container}>
       <Logo></Logo>
@@ -11,8 +19,9 @@ export default function Register() {
           <img className={style.profile}></img>
         </div>
         <div className={style.name_container}>
-          <input className={style.input_name} placeholder='이름을 입력하세요.'></input>
-          <p className={style.alert_name}> 이름을 입력해야 합니다! </p>
+          <input className={style.input_name} placeholder='이름을 입력하세요.'
+          onChange={(e) => {setNickname(e.target.value)}}></input>
+          <p className={style.alert_name}>이름 입력해라</p>
         </div>
         <div className={style.age_container}>
           <p className={style.age_p}>연령</p>
@@ -33,7 +42,7 @@ export default function Register() {
         </div>
         <div className={style.language_container}>
           <button className={style.complete_button}>이전</button>
-          <button className={style.complete_button}>다음</button>
+          <button className={style.complete_button} onClick={() => {console.log(nickname)}}>다음</button>
         </div>
       </div>
 

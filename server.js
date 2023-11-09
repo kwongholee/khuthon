@@ -49,7 +49,7 @@ app.get('/login/redirect', passport.authenticate('google'), async (req, res) => 
         res.redirect('/register')
       }
       else{
-        res.redirect('/')
+        res.redirect('/main')
       }
     })
   } catch (err) {

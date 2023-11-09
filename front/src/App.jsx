@@ -1,4 +1,5 @@
 import './App.css';
+import Login from './routes/Login';
 import Main from './routes/Main';
 import MyPage from './routes/MyPage';
 import Book from './routes/Book';
@@ -13,7 +14,8 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path='/' element={<Main></Main>}></Route>
+        <Route path='/' element={<Login></Login>}></Route>      
+        <Route path='/main' element={<Main></Main>}></Route>      
         <Route path='/mypage/:userid' element={<MyPage></MyPage>}></Route>
         <Route path='/register' element={<Register></Register>}></Route>
         <Route path='/book/:bookid' element={<Book></Book>}></Route>
