@@ -1,3 +1,7 @@
+p {
+  margin: 0;
+}
+
 .bookTitle {
   background-color: white;
   border: black 2px solid;
@@ -7,19 +11,21 @@
 }
 
 .wordlistBackground {
+  display: flex;
   width: 450px;
   height: 300px;
   flex-shrink: 0;
   background-color: #759581;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  justify-content: center;
+  flex-direction: column;
 }
 
 .backgroundColor {
   background-color: white;
-  margin: 25px auto;
+  margin: auto;
   width: 380px;
   height: 150px;
-  flex-shrink: 0;
 }
 
 .leftWordlist {
