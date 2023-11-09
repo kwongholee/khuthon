@@ -45,11 +45,18 @@ app.get('/login/redirect', passport.authenticate('google'), async (req, res) => 
   try {
     db.collection('user').findOne({id:req.user.id}, (err, result)=>{
       if (err) throw err
-      res.send({isLogined: "Logined", userid: req.user.id, usertype : result.usertype})
+      if (result.usertype=="newuser"){
+        console.log(401)
+        res.status(401)
+      }
+      else{
+        console.log(200)
+        res.status(200)
+      }
     })
   } catch (err) {
     console.log(err)
-    res.status(401)
+    res.status(400)
   }
 });
 
