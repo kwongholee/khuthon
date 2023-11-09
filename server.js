@@ -39,24 +39,30 @@ MongoClient.connect(process.env.DB,{useUnifiedTopology: true}, function(err, cli
     })
 })
 
-app.get('/login', passport.authenticate('google', {scope:['profile',
-'email']}))
+app.get('/login', passport.authenticate('google', {scope:['profile']}))
 
 app.get('/login/redirect', passport.authenticate('google'), async (req, res) => {
   try {
-    db.collection('user').findOne({id:profile.id}, (err, result)=>{
+    db.collection('user').findOne({id:req.user.id}, (err, result)=>{
       if (err) throw err
-      if(result!= null)
-        res.send({isLogined: "Logined", userid: req.user.id, image : req.user.profileImage, usertype : result.usertype})
+      if (result.usertype=="newuser"){
+        console.log(401)
+        res.status(401)
+      }
+      else{
+        console.log(200)
+        res.status(200)
+      }
     })
   } catch (err) {
-    res.status(401)
+    console.log(err)
+    res.status(400)
   }
 });
 
 function Logined(req,res, next){
   if (req.user){
-    res.send({isLogined: "Logined", userid: req.user.id, image : req.user.profileImage})
+    res.send({isLogined: "Logined", userid: req.user.id})
     next()
   }
   else{
@@ -64,21 +70,37 @@ function Logined(req,res, next){
   }
 }
 
+function register(data){
+  db.collection('user').insertOne({
+    id : data.id,
+    name : "",
+    level : null,
+    language : null,
+    genre : [],
+    levelBook: [],
+    genreBook : [],
+    book : [],
+    usertype : "newuser"
+  })
+}
+
 passport.use(
   new GoogleStrategy(
      {
         clientID: process.env.OAUTH_ID, 
         clientSecret: process.env.OAUTH_PW,
-        callbackURL: '/login/redirect',
+        callbackURL: '/login/redirect'
      },
      async (accessToken, refreshToken, profile, done)=>{
         db.collection('user').findOne({id:profile.id}, (err, result)=>{
           if (err) throw err
           if (result == null){
-            done(null, false)
+            register(profile)
+            done(null, profile)
           }
           else{
-            done(null,profile)
+            db.collection('user').updateOne({id:profile.id},{$set: {usertype : 'user'}})
+            done(null, profile)
           }
         })
      }
