@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 export default function Genre() {
     let [userId, setUserId] = useState('')
     let navigate = useNavigate()
-    let genres = ['thriller', 'fantasy', 'science', 'history', 'horror', 'crime', 'romance', 'psychology', 'sports', 'travel']
+    let genres = ['thriller', 'fantasy', 'science', 'history', 'horror', 'crime', 'romance', 'psychology', 'sports', 'travel', 'social', 'math']
     let [genre, setGenre] = useState([])
     let [isActive, setIsActive] = useState([false, false, false, false, false, false, false, false, false, false, false, false])
     let [count, setCount] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -106,17 +106,16 @@ export default function Genre() {
         onClick={async () => {
             try {
                 let updatedGenre = genre;
-
                 for (let i = 0; i < 12; i++) {
                     if (isActive[i]) 
                         updatedGenre = [...updatedGenre, genres[i]];
                 }
-
                 setGenre(updatedGenre);
                 console.log(updatedGenre);
 
                 if (trueCount === 3) {
                     await axios.put(`/register/genre/${userId}`, updatedGenre);
+
                     navigate(`/main`);
                 }
             } catch (err) {

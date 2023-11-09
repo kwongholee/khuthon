@@ -142,6 +142,7 @@ app.put('/register/genre/:userid', (req, res)=>{
   else{
     db.collection('user').updateOne({id:req.params.userid},{$set:{
       genre: req.body
+
     }})
     res.status(200).send("선호 장르 등록 완료!")
   }

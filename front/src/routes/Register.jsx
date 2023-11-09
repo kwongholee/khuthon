@@ -6,8 +6,8 @@ import axios from 'axios';
 
 export default function Register() {
 
-  // const nickname = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]{1,10}$/
-  
+  const regexName = /^[가-힣a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ]{1,10}$/
+
   let [nickname, setNickname] = useState('')
   let [age, setAge] = useState('')
   let [language, setLanguage] = useState('')
@@ -38,9 +38,13 @@ export default function Register() {
           <img className={style.profile}></img>
         </div>
         <div className={style.name_container}>
-          <input className={style.input_name} placeholder='이름을 입력하세요.'
-          onChange={(e) => {setNickname(e.target.value)}}></input>
-          <p className={style.alert_name}>이름 입력해라</p>
+          <input className={style.input_name} placeholder='닉네임을 입력하세요.'
+          onKeyUp={(e) => {
+            const inputName = e.target.value;
+            setNickname(inputName);
+          }}></input>
+          <p className={style.alert_name} style={{ display: !regexName.test(nickname) ? 'block' : 'none' }}> 닉네임은 한글, 영문 대소문자, 숫자로 1~10자까지 입력 가능합니다. </p>
+          <p className={style.good_name} style={{ display: !regexName.test(nickname) ? 'none' : 'block' }}> 훌륭한 닉네임이네요! </p>
         </div>
         <div className={style.age_container}>
           <p className={style.age_p}>연령</p>
@@ -56,25 +60,29 @@ export default function Register() {
             <option value="70">70세 이상</option>
           </select>
         </div>
-        <div className={style.language_container}>
-          <button className={style.language_button}
-          onClick={() => {setLanguage('한국어')}}>한국어</button>
-          <button className={style.language_button}
-          onClick={() => {setLanguage('영어')}}>영어</button>
+        <div className={style.language}>
+          <div className={style.language_container}>
+            <button className={style.language_button}
+            onClick={() => {setLanguage('kor')}}>한국어</button>
+            <button className={style.language_button}
+            onClick={() => {setLanguage('eng')}}>영어</button>
+          </div>
+          <p className={style.alert_name} style={{ display: language == '' ? 'block' : 'none' }}> 배우고 싶은 언어를 선택해주세요.</p>
+          <p className={style.good_name} style={{ display: language == 'kor' || language == 'eng' ? 'block' : 'none' }}> 화이팅! </p>
         </div>
         <div className={style.language_container}>
-          <button className={style.complete_button}
-          onClick={() => {
-            axios.put(`/register/profile/${userId}`, {button : 'prev'})
-            .then((res) => {
-              console.log(res.status)
-              console.log('hello')
-                navigate(`/`)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-          }}>이전</button>
+
+        <button
+          className={style.complete_button}
+          onClick={async () => {
+            try {
+              const res = await axios.put(`/register/profile/${userId}`, { button: 'prev' });
+              navigate(`/`);
+            } catch (err) {
+              console.error(err);
+            }
+          }}>이전
+        </button>
           <button className={style.complete_button}
           onClick={() => {
             if(nickname!='' && language!='') {
