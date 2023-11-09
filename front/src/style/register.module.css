@@ -7,6 +7,11 @@
     height: 100vh;
 }
 
+.profile_container {
+    width: 600px;
+    display: flex;
+    justify-content: center;
+}
 .profile {
     width: 248px;
     height: 248px;
@@ -16,11 +21,89 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    margin-top: 44px;
+    margin-top: 20px;
 }
 
 .input_name {
     width: 495px;
     height: 53px;
-    border-bottom: 1px white solid;
+    border: none;
+    border-bottom: 1px gray solid;
+    text-align: center;
+
+    color: #828282;
+    font-family: Inter;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.alert_name {
+    color: #FF0101;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.age_container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.age_p {
+    width: 123px;
+    height: 40px;
+    margin: 0;
+    color: #828282;
+    text-align: center;
+    font-family: Inter;
+    font-size: 38px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.age_select {
+    width: 200px;
+    height: 40px;
+
+    color: #828282;
+    text-align: center;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.language_container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.language_button {
+    width: 195px;
+    height: 53px;
+    margin: 0 -10px 0 -10px;
+    color: black;
+    text-align: center;
+    font-family: Inter;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.complete_button {
+    width: 195px;
+    height: 70px;
+    border-radius: 10px;
+    background: #E0D2B8;
+    color: #000;
+    font-family: Inter;
+    font-size: 30px;
+    font-weight: 700;
 }
