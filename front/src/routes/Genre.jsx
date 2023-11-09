@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 export default function Genre() {
     let [userId, setUserId] = useState('')
     let navigate = useNavigate()
+    let genres = ['thriller', 'fantasy', 'science', 'history', 'horror', 'crime', 'romance', 'psychology', 'sports', 'travel']
     let [genre, setGenre] = useState([])
     let [isActive, setIsActive] = useState([false, false, false, false, false, false, false, false, false, false, false, false])
     let [count, setCount] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -17,6 +18,7 @@ export default function Genre() {
       const response = await axios.get('/authorization');
       const userId = response.data.userid;
       setUserId(userId);
+      console.log('userId : ', userId)
     } catch (error) {
       console.error(error);
     }
@@ -99,16 +101,32 @@ export default function Genre() {
             style={{ background: isActive[11] ? 'lightgray' : 'white' }}>수학</button>
         </div>
       </div>
-          <button className='버튼'
-          onClick={() => {
-            axios.post(`/register/genre/${userId}`, {trueCount})
-            .then((res) => {
-            navigate(`/main`)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-          }}>프로필 생성하기</button>
+      <button
+        className='버튼'
+        onClick={async () => {
+            try {
+                let updatedGenre = genre;
+
+                for (let i = 0; i < 12; i++) {
+                    if (isActive[i]) 
+                        updatedGenre = [...updatedGenre, genres[i]];
+                }
+
+                setGenre(updatedGenre);
+                console.log(updatedGenre);
+
+                if (trueCount === 3) {
+                    await axios.post(`/register/genre/${userId}`, updatedGenre);
+                    navigate(`/main`);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }}>
+        프로필 생성하기
+        </button>
+
+
     </div>
   )
 }
