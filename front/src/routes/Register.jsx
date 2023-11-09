@@ -71,6 +71,7 @@ export default function Register() {
           <p className={style.good_name} style={{ display: language == 'kor' || language == 'eng' ? 'block' : 'none' }}> 화이팅! </p>
         </div>
         <div className={style.language_container}>
+
         <button
           className={style.complete_button}
           onClick={async () => {

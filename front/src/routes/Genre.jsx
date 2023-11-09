@@ -114,8 +114,8 @@ export default function Genre() {
                 console.log(updatedGenre);
 
                 if (trueCount === 3) {
-                    const res = await axios.put(`/register/genre/${userId}`, updatedGenre);
-                    console.log(res.status)
+                    await axios.put(`/register/genre/${userId}`, updatedGenre);
+
                     navigate(`/main`);
                 }
             } catch (err) {

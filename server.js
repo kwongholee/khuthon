@@ -141,7 +141,8 @@ app.put('/register/genre/:userid', (req, res)=>{
   }
   else{
     db.collection('user').updateOne({id:req.params.userid},{$set:{
-      genre: req.body.genre
+      genre: req.body
+
     }})
     res.status(200).send("선호 장르 등록 완료!")
   }
@@ -278,6 +279,39 @@ app.put('/book/:userid/:bookid', (req,res)=>{
       book : bookArray
     }})
   })
+})
+
+var startTime = 0
+
+app.post('/book', (req,res)=>{
+  var startTime = new Date()
+  res.status(200)
+})
+
+app.post('/book/word/:userid/:bookid',(req,res)=>{
+  wordList = req.body.wordList
+  if(wordList.length==0 || wordList.length>10){
+    res.status(400)
+  }
+  else{
+    for(i=0; i<wordList.length; i++){
+      
+      db.collection('word').insertOne({
+        word: wordList[i],
+        bookId: req.params.bookid,
+        userId : req.params.userid,
+        level : ""
+      })
+    }
+  }
+})
+
+app.get('/book/word/{userid}/{bookid}',(req,res)=>{
+  var endTime = new Date();
+  var executionTime = endTime - startTime;
+  var executionTimeInSeconds = executionTime / 1000; //초
+  var executionTimeInMinutes = executionTime / (1000 * 60);//분
+  res.send({"time": executionTime})
 })
 
 function register(data){
