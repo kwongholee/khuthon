@@ -63,7 +63,7 @@ app.get('/login/redirect', passport.authenticate('google'), async (req, res) => 
   }
 });
 
-app.get('/authorization',(req,res)=>{
+app.gett('/authorization',(req,res)=>{
   if (req.user){
     res.send({isLogined: "Logined", userid: req.user.id})
   }
@@ -72,8 +72,8 @@ app.get('/authorization',(req,res)=>{
   }
 })
 
-app.post('/register/profile/:userid',(req, res)=>{
-  button = req.query.button
+app.put('/register/profile/:userid',(req, res)=>{
+  button = req.body.button
   if (button == "prev"){
     db.collection('user').deleteOne({id:req.user.id},(err,result)=>{
       if (err) throw err
@@ -137,7 +137,7 @@ app.post('/register/profile/:userid',(req, res)=>{
   
 })
 
-app.get('/register/genre/:userid', (req, res)=>{
+app.put('/register/genre/:userid', (req, res)=>{
   if((req.body.genre)!=3){
     res.status(400).send("장르를 3개 선택해야 합니다!")
   }
@@ -198,13 +198,18 @@ app.get('/mypage/:userid', (req,res)=>{
 })
 
 app.get('/wordlist/:userid', (req, res)=>{
-  page = req.query.page
+  page = int(req.query.page)
   db.collection('word').find({userId: req.params.userid}).skip((page-1)*10).limit(10).toArray((err,result)=>{
     wordArray = []
-    for (i=0; i<result.length; i++){
-      wordArray.push({"word":result[i].word[0], "wordId":result[i]._id})
+    if (result.length!=0){
+      for (i=0; i<result.length; i++){
+        wordArray.push({"word":result[i].word[0], "wordId":result[i]._id})
+      }
+      res.send({"wordList":wordArray})
     }
-    res.send({"wordList":wordArray})
+    else{
+      res.status(400)
+    }
   })
 })
 
@@ -231,18 +236,21 @@ app.get('/quiz/:bookid', (req, res)=>{
 })
 
 app.get('/quiz/:userid', (req,res)=>{
-  page = req.query.page
+  page = int(req.query.page)
   db.collection('quiz').find({userId : req.params.userid}).skip((page-1)*4).limit(4).toArray((err,result)=>{
-    if(result){
-      res.send({
-        "quiz" : [{
-          "date" : result.date,
-          "title" : "노인과 바다",
-          "wordList" :[{"word":"노인","right":true},
-                    {"word":"바다","right":false}],
-          
-        }]
-      })
+    if (result.length!=0){
+      quizArray = []
+      for (i=0; i<result.length; i++){
+        book = result[i].bookId
+        db.collection('book').findOne({bookId: book}, (err,result2)=>{
+          quizArray.push({
+            "date" : result[i].date,
+            "title" : result2.title,
+            "wordList" : result[i].wordList
+          })
+        })
+      }
+      res.send({"quiz" : quizArray})
     }
     else{
       res.status(400)
@@ -250,10 +258,35 @@ app.get('/quiz/:userid', (req,res)=>{
   })
 })
 
+app.put('/book/:userid/:bookid', (req,res)=>{
+  db.collection('user').findOne({id: req.params.userid},(err,result)=>{
+    bookArray = [...result.book]
+    for(i=0; i<bookArray.length; i++){
+      if(bookArray[i].bookId == req.params.bookid){
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); 
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        bookArray[i].date = formattedDateTime
+        bookArray[i].page = req.body.page
+        break
+      }
+    }
+    db.collection('user').updateOne({id: req.params.userid},{$set:{
+      book : bookArray
+    }})
+  })
+})
+
 function register(data){
   db.collection('user').insertOne({
     id : data.id,
     name : "",
+    profileImage : 0,
     age : 0,
     level : null,
     language : null,
