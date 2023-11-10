@@ -11,6 +11,7 @@ import Genre from './routes/Genre';
 import QuizDetail from './routes/QuizDetail';
 import QuizStart from './routes/QuizStart';
 import QuizResult from './routes/QuizResult';
+import Temp from './routes/Temp'
 
 import {Routes, Route} from 'react-router-dom'
 
@@ -23,13 +24,15 @@ function App() {
         <Route path='/mypage/:userid' element={<MyPage></MyPage>}></Route>
         <Route path='/register/profile/:userid' element={<Register></Register>}></Route>
         <Route path='/register/genre/:userid' element={<Genre/>}></Route>
-        {/* <Route path='/register/genre' element={<Genre/>}></Route> */}
         <Route path='/book/:bookid' element={<Book></Book>}></Route>
         <Route path='/quiz' element={<Quiz></Quiz>}></Route>
         <Route path='/quiz/:userid' element={<QuizDetail></QuizDetail>}></Route>
         <Route path='/quiz/:userid/:bookid' element={<QuizStart></QuizStart>}></Route>
         <Route path='/wordlist/:userid' element={<Wordlist></Wordlist>}></Route>
         <Route path='/level-change/:userid' element={<LevelChange></LevelChange>}></Route>
+
+        <Route path='/Temp' element={<Temp></Temp>}></Route>
+
       </Routes>
     </div>
   );
