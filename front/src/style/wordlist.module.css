@@ -1,33 +1,10 @@
-.searchTable {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.searchInput {
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;  
-    width: 587px;
-    height: 50px;
-    float: left;
-}
-
-.searchBtn {   
-    float: left;
-    cursor: pointer;
-    width: 50px;
-    height: 50px;
-    border: 3px solid #000;
-    background: #FFF;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-}
-
 .wordTable {
     width: 916px;
     height: 278px;
     display: flex;
-    margin: auto;
+    margin-top: 50px;
+    margin-right: auto;
+    margin-left: auto;
     justify-content: center;
     flex-direction: column;
     text-align: center;
@@ -41,4 +18,23 @@
     font-style: normal;
     font-weight: 700;               
     line-height: normal;    
+}
+
+.submitBtn {
+    margin-top: 20px;
+    margin-right : auto;
+    margin-left : auto;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid black;
+    width: 200px;
+    height: 50px;
+    border-radius: 10px;
+}
+.submitBtn:hover {
+    background-color: black;
+    color: white;
 }

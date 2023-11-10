@@ -9,6 +9,7 @@ const session = require("express-session");
 const app = express();
 const MongoClient = require('mongodb').MongoClient
 const mongodb = require('mongodb');
+const {execSync} = require('child_process')
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
@@ -289,13 +290,25 @@ app.post('/book', (req,res)=>{
 })
 
 app.post('/book/word/:userid/:bookid',(req,res)=>{
-  wordList = req.body.wordList
+  //wordList = req.body.wordList
+  lang = "eng"
+  wordList = ["휴대폰이","질렸다","어떻게","어둠을","세상아"]
   if(wordList.length==0 || wordList.length>10){
     res.status(400)
   }
   else{
     for(i=0; i<wordList.length; i++){
-      
+      if(lang=="kor"){
+        pythonPath = path.resolve(__dirname,'./morpheme_kor.py')
+        try {
+          const result = execSync(`python ${pythonScriptPath} ${wordList}`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
+          const [stdout, stderr] = result.trim().split('\n');
+          console.log('Python 표준 출력:', stdout);
+          console.error('Python 표준 에러:', stderr);
+        } catch (error) {
+            console.error('에러:', error.message);
+        }
+      }
       db.collection('word').insertOne({
         word: wordList[i],
         bookId: req.params.bookid,

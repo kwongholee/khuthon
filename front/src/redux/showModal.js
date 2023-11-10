@@ -1,18 +1,18 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
-export const showModal = createSlice({
-  name: 'showModal',
-  initialState: {value: false},
-  reducers: {
-    closeModal(state) {
-      state.value = false
-    },
-    openModal(state) {
-      state.value = true
+export const show = createSlice({
+    name: 'show',
+    initialState: {show: false},
+    reducers: {
+        openModal: (state) => {
+            state.show = true
+        },
+        closeModal: (state) => {
+            state.show = false
+        }
     }
-  }
 })
 
-export const {closeModal, openModal} = showModal.actions;
+export const {openModal, closeModal} = show.actions;
 
-export default showModal.reducer;
+export default show.reducer
