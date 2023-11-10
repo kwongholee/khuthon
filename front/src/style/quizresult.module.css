@@ -1,5 +1,6 @@
 .bookTitle {
-    margin: auto;
+    margin-left: 32%;
+    margin-bottom: 50px;
     display: flex;
     width: 500px;
     height: 100px;
@@ -18,21 +19,30 @@
     line-height: normal;
 }
 
+.date {
+    float: right;
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
 .box {
-    margin: auto;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 20px;
     width: 1000px;
-    height: 659px;
+    height: 550px;
     border-radius: 10px;
     border: 2px solid #000;
 }
 
 .completeBtn {
+    float: right;
     display: flex;
     flex-direction: column;
     justify-content: center;
     border-radius: 10px;
-    width: 150px;
-    height: 75px;
+    width: 100px;
+    height: 50px;
     cursor: pointer;
     text-align: center;
     border: #83B099 2px solid;

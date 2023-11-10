@@ -1,6 +1,11 @@
+import { useEffect } from 'react'
 import style from '../style/quiz.module.css'
 
 export default function WordList() {
+  useEffect(() => {
+    
+  })
+
   return(
     <div>
       <div className={style.wordlistBackground}>
@@ -17,7 +22,6 @@ export default function WordList() {
               <li>a</li>
             </ul>
           </div>
-
           <div className={style.rightWordlist}>
             <ul>
               <li>a</li>
@@ -27,8 +31,8 @@ export default function WordList() {
               <li>a</li>
             </ul>
           </div>
-        <p style={{float: 'right'}}>날짜</p>
         </div>
+        <div style={{width: '100%', textAlign: 'center', fontSize: '14px', marginBottom: '10px'}}>날짜</div>
       </div>
     </div>
   )

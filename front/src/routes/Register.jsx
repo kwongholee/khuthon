@@ -3,22 +3,34 @@ import style from '../style/register.module.css';
 import Logo from '../components/Logo';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import {setUserId, setLang, setImage} from '../redux/user'
+
 
 export default function Register() {
 
   const regexName = /^[가-힣a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ]{1,10}$/
 
+  let user = useSelector((state) => state.user);
+  let imageidx = [1, 2, 3 ,4]
+  let [image, setImage] = useState(0)
+  
+
   let [nickname, setNickname] = useState('')
   let [age, setAge] = useState('')
-  let [language, setLanguage] = useState('')
-  let [userId, setUserId] = useState('')
+  // let [language, setLanguage] = useState('')
+  // let [userId, setUserId] = useState('')
+
   let navigate = useNavigate()
+  let dispatch = useDispatch()
 
   const fetchUserId = async () => {
     try {
+      // console.log(window.innerWidth)
+      // console.log(window.innerHeight)
       const response = await axios.get('/authorization');
-      const userId = response.data.userid; // res.userid 대신 res.data.userid를 사용합니다.
-      setUserId(userId);
+      const serverUserId = response.data.userid;
+      dispatch(setUserId(serverUserId));
     } catch (error) {
       console.error(error);
     }
@@ -26,7 +38,7 @@ export default function Register() {
 
   useEffect(() => {
     fetchUserId()
-  },[])
+  },[dispatch])
 
   const onSelect = (e) => {setAge(e.target.value)}
 
@@ -35,7 +47,17 @@ export default function Register() {
       <Logo></Logo>
       <div style={{display:'flex', justifyContent:'center', alignItems:'center', flexDirection:'column'}}>
         <div className={style.profile_container}>
-          <img className={style.profile}></img>
+            {imageidx.map((a,i) => {
+              return (
+                <div>
+                  <img src={'/profile-' + a + '.png'} className={style.profile}
+                    onClick={() => {
+                      setImage(a)
+                      console.log(a)
+                    }}></img>
+                </div>
+              )
+            }) }
         </div>
         <div className={style.name_container}>
           <input className={style.input_name} placeholder='닉네임을 입력하세요.'
@@ -63,12 +85,12 @@ export default function Register() {
         <div className={style.language}>
           <div className={style.language_container}>
             <button className={style.language_button}
-            onClick={() => {setLanguage('kor')}}>한국어</button>
+            onClick={() => {dispatch(setLang('kor'))}}>한국어</button>
             <button className={style.language_button}
-            onClick={() => {setLanguage('eng')}}>영어</button>
+            onClick={() => {dispatch(setLang('eng'))}}>영어</button>
           </div>
-          <p className={style.alert_name} style={{ display: language == '' ? 'block' : 'none' }}> 배우고 싶은 언어를 선택해주세요.</p>
-          <p className={style.good_name} style={{ display: language == 'kor' || language == 'eng' ? 'block' : 'none' }}> 화이팅! </p>
+          <p className={style.alert_name} style={{ display: user.lang == '' ? 'block' : 'none' }}> 배우고 싶은 언어를 선택해주세요.</p>
+          <p className={style.good_name} style={{ display: user.lang == 'kor' || user.lang == 'eng' ? 'block' : 'none' }}> 화이팅! </p>
         </div>
         <div className={style.language_container}>
 
@@ -76,7 +98,7 @@ export default function Register() {
           className={style.complete_button}
           onClick={async () => {
             try {
-              const res = await axios.put(`/register/profile/${userId}`, { button: 'prev' });
+              const res = await axios.put(`/register/profile/${user.userId}`, { button: 'prev' });
               navigate(`/`);
             } catch (err) {
               console.error(err);
@@ -84,17 +106,17 @@ export default function Register() {
           }}>이전</button>
           <button className={style.complete_button}
           onClick={() => {
-            if(nickname!='' && language!='') {
+            if(nickname!='' && user.lang!='') {
               const newUser = {
                 name : nickname,
                 age : age,
-                lang : language,
-                button: 'next'
+                lang : user.lang,
+                profileImage : image
               }
               console.log(newUser)
-              axios.put(`/register/profile/${userId}`, newUser)
+              axios.put(`/register/profile/${user.userId}`, newUser)
               .then((res) => {
-                navigate(`/register/genre/${userId}`)
+                navigate(`/register/genre/${user.userId}`)
               })
               .catch((err) => {
                   console.log(err)

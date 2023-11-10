@@ -3,21 +3,27 @@ import Logo from '../components/Logo';
 import axios from 'axios';
 import style from '../style/genre.module.css';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {setUserId} from '../redux/user'
+
 
 export default function Genre() {
-    let [userId, setUserId] = useState('')
-    let navigate = useNavigate()
+    let userId = useSelector((state) => state.user.userId);
+    
     let genres = ['thriller', 'fantasy', 'science', 'history', 'horror', 'crime', 'romance', 'psychology', 'sports', 'travel', 'social', 'math']
     let [genre, setGenre] = useState([])
     let [isActive, setIsActive] = useState([false, false, false, false, false, false, false, false, false, false, false, false])
     let [count, setCount] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
+    let navigate =  useNavigate();
+    let dispatch = useDispatch();
+
   //중복되는 함수니까 나중에 함수 파일 하나 만들어야 할 듯?
   const fetchUserId = async () => {
     try {
       const response = await axios.get('/authorization');
-      const userId = response.data.userid;
-      setUserId(userId);
+      const serverUserId = response.data.userid;
+      dispatch(setUserId(serverUserId));
       console.log('userId : ', userId)
     } catch (error) {
       console.error(error);
@@ -41,9 +47,12 @@ export default function Genre() {
     
     else 
         updatedIsActive[index] = false;
-    
     setIsActive(updatedIsActive);
   };
+
+  useEffect(() => {
+    countTrueValues(isActive)
+  }, [isActive])
 
   const countTrueValues = (array) => {
     return array.filter(value => value === true).length;
@@ -54,7 +63,7 @@ export default function Genre() {
   return (
     <div className={style.container}>
       <Logo></Logo>
-      <p>선호하는 책의 장르 3가지를 선택해주세요.</p>
+      <p className={style.genre_title}>선호하는 책의 장르 3가지를 선택해주세요.</p>
       <div className='버튼들'>
         <div className={style.button_container}>
             <button className={style.genre_button}
@@ -104,6 +113,7 @@ export default function Genre() {
       <button
         className='버튼'
         onClick={async () => {
+          if (trueCount === 3) {
             try {
                 let updatedGenre = genre;
                 for (let i = 0; i < 12; i++) {
@@ -113,14 +123,13 @@ export default function Genre() {
                 setGenre(updatedGenre);
                 console.log(updatedGenre);
 
-                if (trueCount === 3) {
+                
                     await axios.put(`/register/genre/${userId}`, updatedGenre);
-
-                    navigate(`/main`);
-                }
+                    navigate(`/mainpage`);
             } catch (err) {
                 console.error(err);
             }
+          }
         }}>
         프로필 생성하기
         </button>

@@ -1,54 +1,43 @@
 import '../App.css'
 import style from '../style/wordlist.module.css';
-import Logo from '../components/Logo';
-import ProfileImage from '../components/ProfileImage';
+import Navbar from '../components/Navbar';
 import Word from '../components/Word';
 import { useEffect, useState } from 'react';
-import {FaSearch} from 'react-icons/fa'
 import LeftBtn from '../components/LeftBtn';
 import RightBtn from '../components/RightBtn';
 import WordlistModal from '../components/WordlistModal';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { openModal } from '../redux/showModal';
+import axios from 'axios';
 
 export default function Wordlist() {
-  let dispatch = useDispatch();
-  let show = useSelector((state) => state.showModal.value)
+  // let dispatch = useDispatch();
   let {userid} = useParams();
   let [search, setSearch] = useState('');
-  let [word, setWord] = useState([]);
+  let [word, setWord] = useState([1,2,3,4,5]);
+  let [definition, setDefinition] = useState([]);
   let [idx, setIdx] = useState(-1);
-
-  useEffect(() => {
-    setWord([1,2,3,4,5]);
-  }, [])
+  let data = useSelector((state) => state.word.word)
+  let show = useSelector((state) => state.show.show)
 
   return(
     <div>
-      <div>
-        <Logo></Logo>
-        <ProfileImage></ProfileImage>
-      </div>
+      <Navbar></Navbar>
 
       <div className='background'>
-        {1 == 0 ? <LeftBtn></LeftBtn> : null}
-        {1 == 0 ? <RightBtn></RightBtn> : null}
-        <div className={style.searchTable}>
-          <input type="text" className={style.searchInput} onChange={(e) => {setSearch(e.target.value)}} />
-          <div className={style.searchBtn}>
-            <FaSearch size={30} />
-          </div>
-        </div>
-
+        {1 === 0 ? <LeftBtn></LeftBtn> : null}
+        {1 === 0 ? <RightBtn></RightBtn> : null}
+        <div className={style.submitBtn} onClick={() => {console.log(data)}}>제출</div>
         <div>
           <div className={style.wordTable}>
-            <div className={style.wordTableTitleColumn} style={{width: '30%'}}>WORD</div>
-            <div className={style.wordTableTitleColumn} style={{width: '70%'}}>MEANING</div>
+            <div style={{display: 'flex'}}>
+              <div className={style.wordTableTitleColumn} style={{width: '30%', borderRight: '#8C8C8C 2px solid', borderLeft: '#D3D3D3 1px solid'}}>WORD</div>
+              <div className={style.wordTableTitleColumn} style={{width: '69.6%', borderRight: '#D3D3D3 1px solid'}}>MEANING</div>
+            </div>
             {
               word.map((a,i) => {
                 return(
-                  <div key={i} onClick={() => {setIdx(i); dispatch(openModal())}}>
+                  <div key={i} onClick={() => {setIdx(i);}}>
                     <Word word={a}></Word>
                     {idx === i && show ? <WordlistModal></WordlistModal> : null}
                   </div>

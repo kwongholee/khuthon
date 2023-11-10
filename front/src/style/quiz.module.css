@@ -6,14 +6,18 @@ p {
   background-color: white;
   border: black 2px solid;
   text-align: center;
-  margin: 0 auto;
+  margin: 10px auto 0px;
   width: 60%;
 }
 
 .wordlistBackground {
   display: flex;
+  margin-top: 50px;
+  margin-left: 170px;
+  margin-bottom: 80px;
+  float: left;
   width: 450px;
-  height: 300px;
+  height: 270px;
   flex-shrink: 0;
   background-color: #759581;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -24,6 +28,7 @@ p {
 .backgroundColor {
   background-color: white;
   margin: auto;
+  margin-top: 10px;
   width: 380px;
   height: 150px;
 }

@@ -1,27 +1,30 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {AiOutlineSound} from 'react-icons/ai'
 import {useDispatch, useSelector} from 'react-redux'
-import {showModal} from '../redux/showModal'
+import axios from "axios"
+import { closeModal } from "../redux/showModal";
 
 export default function WordlistModal() {
-    let dispatch = useDispatch()
-    let showModal = useSelector((state) => state.showModal.value);
-    let [define, setDefine] = useState([]);
+    let [define, setDefine] = useState([{definition: 'def', example: 'exa'}]);
+    let dispatch = useDispatch();
 
     return(
         <div>
-            <div>
-                <div onClick={(() => {dispatch(showModal())})}>닫기</div>
-                <h2>단어</h2>
-                <div><AiOutlineSound style={{cursor: 'pointer'}} onClick={() => {}} /></div>
+            <div style={{borderRight: '#D3D3D3 1px solid', borderLeft: "#D3D3D3 1px solid"}}>
+                <div style={{float: 'right', marginRight: '10px', cursor: 'pointer'}} onClick={() => {
+                    dispatch(closeModal());
+                }}>닫기</div>
+                <h2 style={{textAlign: 'left', marginLeft: '20px'}}>단어</h2>
+                <div><AiOutlineSound style={{cursor: 'pointer'}} /></div>
+                <hr />
             </div>
-
             {
                 define.map((a,i) => {
                     return(
-                        <div key={i}>
-                            <h3>{i+1}. {a.definition}</h3>
-                            <p>ex. {a.example}</p>
+                        <div key={i} style={{textAlign: 'left', borderRight: '#D3D3D3 1px solid', borderLeft: "#D3D3D3 1px solid"}}>
+                            <h3 style={{marginLeft: '20px'}}>{i+1}. {a.definition}</h3>
+                            <p style={{marginLeft: '30px'}}>ex. {a.example}</p>
+                            <hr />
                         </div>
                     )
                 })
