@@ -259,6 +259,7 @@ app.post('/quiz/result', (req, res)=>{
     "rightNum" : req.body.rightNum,
     "totalNum" : req.body.totalNum,
     "wordList" : req.body.result,
+    "userId": req.user.id,
     "date" : date,
     "lang" : lang,
     "bookId" : req.body.bookId
@@ -372,7 +373,7 @@ app.post('/book/word/:userid/:bookid',async (req,res)=>{
           lang : "kor",
           bookId: req.params.bookid,
           userId : req.params.userid,
-          level : int(total/totalNum),
+          level : total/totalNum,
           testNum : 0
         })
       }
