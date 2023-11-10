@@ -1,7 +1,6 @@
 import '../App.css'
 import style from '../style/quizresult.module.css';
-import Logo from '../components/Logo';
-import ProfileImage from '../components/ProfileImage';
+import Navbar from '../components/Navbar';
 import { useParams } from 'react-router-dom';
 
 export default function QuizResult() {
@@ -9,14 +8,11 @@ export default function QuizResult() {
 
   return(
     <div>
-      <div>
-        <Logo></Logo>
-        <ProfileImage></ProfileImage>
-      </div>
+      <Navbar></Navbar>
 
       <div className='background'>
         <div>
-          <div style={{float: 'right'}}>날짜</div>  
+          <div className={style.date}>날짜</div>  
           <div className={style.bookTitle}>book title</div>
         </div>
 
@@ -41,10 +37,7 @@ export default function QuizResult() {
             <h4>맞춘 개수</h4>
           </div>
         </div>
-       
-        <div>
-          <div className={style.completeBtn}>완료</div>
-        </div>
+        <div className={style.completeBtn}>완료</div>
       </div>
     </div>
   )

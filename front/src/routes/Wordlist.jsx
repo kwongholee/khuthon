@@ -1,7 +1,6 @@
 import '../App.css'
 import style from '../style/wordlist.module.css';
-import Logo from '../components/Logo';
-import ProfileImage from '../components/ProfileImage';
+import Navbar from '../components/Navbar';
 import Word from '../components/Word';
 import { useEffect, useState } from 'react';
 import LeftBtn from '../components/LeftBtn';
@@ -23,10 +22,7 @@ export default function Wordlist() {
 
   return(
     <div>
-      <div>
-        <Logo></Logo>
-        <ProfileImage></ProfileImage>
-      </div>
+      <Navbar></Navbar>
 
       <div className='background'>
         {1 === 0 ? <LeftBtn></LeftBtn> : null}

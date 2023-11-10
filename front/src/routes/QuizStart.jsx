@@ -1,6 +1,5 @@
 import style from '../style/quizstart.module.css';
-import Logo from '../components/Logo';
-import ProfileImage from '../components/ProfileImage';
+import Navbar from '../components/Navbar';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export default function QuizStart() {
@@ -9,10 +8,7 @@ export default function QuizStart() {
 
   return(
     <div>
-      <div>
-        <Logo></Logo>
-        <ProfileImage></ProfileImage>
-      </div>
+      <Navbar></Navbar>
 
       <div className='background'>
         <div className={style.content}>

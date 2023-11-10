@@ -1,19 +1,14 @@
 import '../App.css'
 import style from '../style/quizdetail.module.css'
-import Logo from "../components/Logo"
-import ProfileImage from "../components/ProfileImage"
+import Navbar from '../components/Navbar';
 import LeftBtn from '../components/LeftBtn';
 import RightBtn from '../components/RightBtn';
-import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 
 export default function QuizDetail() {
     return(
         <div>
-            <div>
-                <Logo></Logo>
-                <ProfileImage></ProfileImage>
-            </div>
+            <Navbar></Navbar>
 
             <div className='background'>
                 <div>

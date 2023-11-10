@@ -12,6 +12,10 @@ p {
 
 .wordlistBackground {
   display: flex;
+  margin-top: 50px;
+  margin-left: 170px;
+  margin-bottom: 80px;
+  float: left;
   width: 450px;
   height: 270px;
   flex-shrink: 0;

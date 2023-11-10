@@ -1,12 +1,15 @@
+import style from '../style/navbar.module.css'
 import { useNavigate } from "react-router-dom"
+import {useSelector} from 'react-redux'
 
 export default function Navbar() {
     let navigate = useNavigate();
+    let data = useSelector((state) => state.user.image)
 
     return(
-        <div>
-            <img style={{width:'248px', height:'145px'}} src='/logo.png' onClick={() => {navigate('/main')}} alt="logo" />
-            <img src="/" alt="profileImage" />
+        <div style={{backgroundColor: '#f2f2f2', display: 'flex'}}>
+            <img className={style.logo} src='/logo.png' onClick={() => {navigate('/main')}} alt="logo" />
+            <img className={style.profileImg} src={"/profile-" + data + '.png'} alt="profileImage" />
         </div>
     )
 }
