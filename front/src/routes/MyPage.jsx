@@ -26,12 +26,12 @@ export default function MyPage() {
   ];
 
   const recent_voca = [
-    {voca1 : '단어단어단어단어1'},
-    {voca2 : '단어단어단어단어2'},
-    {voca3 : '단어단어단어단어3'},
-    {voca4 : '단어단어단어단어4'},
-    {voca5 : '단어단어단어단어5'},
-    {voca6 : '단어단어단어단어6'}
+    {voca1 : '포함하다'},
+    {voca2 : '가시'},
+    {voca3 : '엄청난'},
+    {voca4 : '반대로'},
+    {voca5 : '포유류'},
+    {voca6 : '휴대용'}
   ]
 
   const fetchLevel = async () => {
@@ -115,16 +115,16 @@ export default function MyPage() {
             <div className={style.quiz_container}>
               <div>
                 <ul  className={style.voca_container}>
-                  <li className={style.voca}>단어단어단어단어1</li>
-                  <li className={style.voca}>단어단어단어단어2</li>
-                  <li className={style.voca}>단어단어단어단어3</li>
+                  <li className={style.voca}>포함하다</li>
+                  <li className={style.voca}>가시</li>
+                  <li className={style.voca}>엄청난</li>
                 </ul>
               </div>
               <div>
                 <ul className={style.voca_container}>
-                  <li className={style.voca}>단어단어단어단어4</li>
-                  <li className={style.voca}>단어단어단어단어5</li>
-                  <li className={style.voca}>단어단어단어단어6</li>
+                  <li className={style.voca}>반대로</li>
+                  <li className={style.voca}>포유류</li>
+                  <li className={style.voca}>휴대용</li>
                 </ul>
               </div>
 
