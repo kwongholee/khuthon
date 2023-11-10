@@ -1,0 +1,19 @@
+.left_icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-680%, -10%);
+    width: 100px;
+    height: 100px;
+    cursor: pointer
+  }
+  
+  .right_icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(580%, -10%);
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+  }
