@@ -28,7 +28,7 @@ function App() {
         <Route path='/quiz/:userid' element={<QuizDetail></QuizDetail>}></Route>
         <Route path='/quiz/:userid/:bookid' element={<QuizStart></QuizStart>}></Route>
         <Route path='/quiz/result/:quizid' element={<QuizResult></QuizResult>}></Route>
-        <Route path='/wordlist/:userid' element={<Wordlist></Wordlist>}></Route>
+        <Route path='/showwordlist/:userid' element={<Wordlist></Wordlist>}></Route>
         <Route path='/level-change/:userid' element={<LevelChange></LevelChange>}></Route>
       </Routes>
     </div>

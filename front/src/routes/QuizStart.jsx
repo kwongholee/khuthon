@@ -8,21 +8,21 @@ import { getQuiz } from '../redux/quiz';
 import { useEffect, useState } from 'react';
 
 export default function QuizStart() {
-  let {bookid} = useParams();
+  let {userid, bookid} = useParams();
   let navigate = useNavigate();
   let dispatch = useDispatch();
-  let userid = useSelector((state) => state.user.userId)
   let word = useSelector((state) => state.word.word)
   let [title, setTitle] = useState("");
   let [img, setImg] = useState("");
 
-  const fetch = async (data) => {
-    return await axios('/quiz/' + bookid);
+  const fetch = async () => {
+    let result = await axios.get('/quiz/' + bookid);
+    setTitle(result.data.title);
+    setImg(result.data.bookImage);
   }
 
   useEffect(() => {
-    setTitle(fetch.title);
-    setImg(fetch.bookImage);
+    fetch();
   })
 
   return(
@@ -45,9 +45,9 @@ export default function QuizStart() {
               </ul>
             </div>
             <div className={style.startBtn} onClick={async () => {
-              const response = await axios.post('/quiz/word/'+userid, {userId: userid, word, bookId: bookid});
-              await dispatch(getAnswer(response.answer));
-              await dispatch(getQuiz(response.quiz));
+              const response = await axios.post('/quiz/word/'+ userid, {userId: userid, word, bookId: bookid});
+              await dispatch(getAnswer(response.data.answer));
+              await dispatch(getQuiz(response.data.quiz));
               navigate('/quiz/detail?page=1')
             }}>시작</div>
           </div>

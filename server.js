@@ -9,6 +9,7 @@ const session = require("express-session");
 const app = express();
 const MongoClient = require('mongodb').MongoClient
 const mongodb = require('mongodb');
+const {ObjectId} = require('mongodb')
 const {execSync} = require('child_process')
 const fs = require('fs')
 
@@ -226,6 +227,7 @@ app.get('/mypage/:userid', (req,res)=>{
 })
 
 app.get('/wordlist/:userid', (req, res)=>{
+  console.log('hi');
   db.collection('user').findOne({id:'111695717319585087284'}, (err, result)=>{
     console.log(result.lang)
     lang = result.lang
@@ -247,6 +249,7 @@ app.get('/wordlist/:userid', (req, res)=>{
 })
 
 app.post('/quiz/result', (req, res)=>{
+  console.log(req.user.id);
   now = new Date();
   year = now.getFullYear();
   month = now.getMonth() + 1;
@@ -277,11 +280,14 @@ app.post('/quiz/result', (req, res)=>{
       })
     }
   }
+  db.collection('quiz').findOne({userId: req.user.id, bookId: req.body.bookId}, (err,result) => {
+    res.redirect('/quiz/result/' + result._id);
+  })
 })
 
 app.get('/quiz/:bookid', (req, res)=>{
-  db.collection('book').findOne({_id:req.params.bookid}, (err, result)=>{
-    res.send({"title":result.title, "bookImage":result.bookImage})
+  db.collection('book').findOne({_id:ObjectId(req.params.bookid)}, (err, result)=>{
+    res.send({"title":result.engTitle, "bookImage":result.bookImage})
   })
 })
 
@@ -440,7 +446,8 @@ app.get('/test',(err,res)=>{
 })
 
 app.post('/quiz/word/:userid',(req,res)=>{
-  db.collection('book').findOne({_id:req.body.bookId},(err,result)=>{
+  console.log(req.body.word)
+  db.collection('book').findOne({_id:ObjectId(req.body.bookId)},(err,result)=>{
     inputArray = []
     let lang;
     // for(i=0; i<req.body.word.length; i++){
@@ -453,16 +460,16 @@ app.post('/quiz/word/:userid',(req,res)=>{
     inputArray=[["apple",0],["hamster",3],["water",2],["bottle",0],["hello",0],["handkerchief",0]]
     pythonPath = path.resolve(__dirname,`./make_quiz_${lang}.py`)
     let pyResult;
-    try {
-      pyResult = execSync(`python3 ${pythonPath} '${JSON.stringify(inputArray)}'`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
-      pyResult = pyResult.trim()
-      pyResult = eval(pyResult)
-      console.log(pyResult)
-    } catch (error) {
-        console.error('에러:', error.message);
-    }
+    // try {
+    //   pyResult = execSync(`python3 ${pythonPath} '${JSON.stringify(inputArray)}'`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
+    //   pyResult = pyResult.trim()
+    //   pyResult = eval(pyResult)
+    //   console.log(pyResult)
+    // } catch (error) {
+    //     console.error('에러:', error.message);
+    // }
     quizArray = [["hi", "a"], ["hi", "b"], ["hi", "c"]]
-    res.send({"quiz":quizArray, "bookId":bookId, "bookImage":bookImage})
+    res.send({"quiz":quizArray, "bookId": req.body.bookId, "bookImage": result.bookImage})
   })
 })
 
