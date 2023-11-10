@@ -52,13 +52,7 @@ function Book() {
             let position = window.scrollY
             console.log(position)
             dispatch(setPosition(position))
-            axios.put(`/mypage/${userId}`, {position : position})
-              .then((res) => {
-                console.log(position)
-              })
-              .catch((err) => {
-                  console.log(err)
-              })
+
             axios.get(`/book`)
             .then((res) => {
               navigate(`/mypage/${userId}`)
