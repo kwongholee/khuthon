@@ -8,14 +8,18 @@ import {useSelector,  useDispatch } from 'react-redux'
 import { setImage, setLang, setUserId } from '../redux/user';
 import { addRecentBook } from '../redux/recentBook';
 import { useEffect } from 'react';
+import { setPosition } from '../redux/page';
 
 export default function Main() {
   let navigate =  useNavigate();
   let dispatch = useDispatch();
 
-  let userId = useSelector((state) => state.user.userId);
-  let lang = useSelector((state) => state.user.lang);
+  let user = useSelector((state) => state.user)
+  let userId = user.userId
+  let lang = user.lang
   let image = useSelector((state) => state.user.image);
+  let page = useSelector((state) => state.page);
+  let currentPosition = page.currentPosition
 
   let recentBook = useSelector((state) => state.recentBook);
   let bookId = recentBook.boodId
@@ -60,15 +64,20 @@ export default function Main() {
   const fetchUserLang = async () => {
     try {
       const response = await axios.get(`/mypage/${userId}`);
-      const serverLang = response.data.user.lang
-      const serverRecentBook = response.data.book
-      dispatch(setLang(serverLang));
-      dispatch(addRecentBook(serverRecentBook));
-      console.log(recentBook)
+      // const serverLang = response.data.lang
+      // const serverRecentBook = response.data.book
+      const serverPosition = response.data.user.position
+      // dispatch(setLang(serverLang));
+      // dispatch(addRecentBook(serverRecentBook));
+      dispatch(setPosition(serverPosition))
+      // console.log(serverLang)
+      console.log(serverPosition)
+      // console.log(serverRecentBook)
     } catch (error) {
       console.error(error);
     }
   };  
+  
   useEffect(() => {
     fetchUserInfo()
   }, [])
@@ -132,16 +141,19 @@ export default function Main() {
                   </div>
               </div>
               <button className={style.read_button}
-                onClick={() => {
-                  axios.get('/book')
-                  .then(res => {
-                    navigate(`/book/${bookId}`)
-                  })
-                  .catch(err => {
-                    console.log(err)
-                  })
+                onClick={async () => {
+                  try {
+                    const newBookId = recentBook[recentBook.length - 1].bookId;
+                    console.log(newBookId);
+
+                    // 데이터를 요청 본문에 보내려면 아래와 같이 수정
+                    const response = await axios.get(`/book`);
+                    // currentPosition = response.data.position
+                    navigate(`/book/${newBookId}`);
+                  } catch (err) {
+                    console.error(err);
+                  }
                 }}
-              
               >마저 읽기</button>
             </div>
           )
