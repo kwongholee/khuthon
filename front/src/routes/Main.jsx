@@ -7,6 +7,22 @@ import RightBtn from '../components/RightBtn'
 
 //userid 묻는 get 요청 하나 쏘기, 등록하면 post도 쏘기
 export default function Main() {
+
+  const recommend_books = [
+    { title: '책 제목 1' },
+    { title: '책 제목 2' },
+    { title: '책 제목 3' },
+    { title: '책 제목 4' },
+    { title: '책 제목 5' },
+  ];
+  const book_list = [
+    { title: '책 제목 1' },
+    { title: '책 제목 2' },
+    { title: '책 제목 3' },
+    { title: '책 제목 4' },
+    { title: '책 제목 5' },
+  ];
+  
   return (
     <div className={style.main_background}> 
       <div id='위에 div' className={style.first_container}>
@@ -46,13 +62,31 @@ export default function Main() {
           <div className={style.list_title}>이런 책은 어떠세요?</div>
           <LeftBtn className={style.left_icon}></LeftBtn>
           <RightBtn className={style.right_icon}></RightBtn>
-          <div className={style.recommend_book}></div>   
+          <div className={style.recommend_book}>
+            {
+              recommend_books.map((book, index) => (
+                <div key={index} className={style.book_container}>
+                  <div className={style.book}></div>
+                  <p className={style.book_title}>{book.title}</p>
+                </div>
+              ))
+            }
+          </div>   
         </div>
         <div className={style.list_container}>
           <div className={style.list_title}>책 목록</div>
           <LeftBtn className={style.left_icon}></LeftBtn>
           <RightBtn className={style.right_icon}></RightBtn>
-          <div className={style.book_list}></div>   
+          <div className={style.book_list}>
+            {
+              book_list.map((book, index) => (
+                  <div key={index} className={style.book_container}>
+                    <div className={style.book}></div>
+                    <p className={style.book_title}>{book.title}</p>
+                  </div>
+                ))
+            }
+          </div>   
         </div>
     </div>
   )
