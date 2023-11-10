@@ -5,7 +5,9 @@ import LeftBtn from '../components/LeftBtn'
 import RightBtn from '../components/RightBtn'
 import { useNavigate } from 'react-router-dom';
 import {useSelector,  useDispatch } from 'react-redux'
-import { setLang } from '../redux/user';
+import { setLang, setUserId } from '../redux/user';
+import { addRecentBook } from '../redux/recentBook';
+import { useEffect } from 'react';
 
 export default function Main() {
   let navigate =  useNavigate();
@@ -13,6 +15,7 @@ export default function Main() {
 
   let userId = useSelector((state) => state.user.userId);
   let lang = useSelector((state) => state.user.lang);
+  let recentBook = useSelector((state) => state.recentBook);
 
   const recommend_books = [
     { title: '책 제목 1' },
@@ -29,7 +32,45 @@ export default function Main() {
     { title: '책 제목 5' },
   ];
 
+  const fetchUserId = async () => {
+    try {
+      const response = await axios.get('/authorization');
+      const serverUserId = response.data.userid;
+      dispatch(setUserId(serverUserId));
+      console.log(userId)
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  //프사랑 언어랑 최근 읽은 책 가져오기
+  const fetchUserInfo = async () => {
+    try {
+      const response = await axios.get(`/mypage/${userId}`);
+      const serverLang = response.data.user.lang
+      const serverRecentBook = response.data.book
+      dispatch(setLang(serverLang));
+      dispatch(addRecentBook(serverRecentBook));
+      console.log(recentBook)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchMain = async () => {
+    try {
+      const response = await axios.get('/main');
+      console.log('good')
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMain()
+    fetchUserId()
+    fetchUserInfo()
+  }, [])
 
   return (
     <div className={style.main_background}> 
@@ -59,7 +100,28 @@ export default function Main() {
             </div>
           </div>
         <div className={style.recent_book}>
-          <p className={style.recent_none}> 읽은 책이 아직 없어요.</p>
+          {recentBook.length === 1 ? 
+            (
+            <div>
+              <p className={style.recent_none}> 읽은 책이 아직 없어요.</p>
+              {console.log("근데 아마 1일걸?", recentBook.length)}
+            </div>
+            )
+          : (
+            <div>
+              <div className={style.recent_book}>
+                <div className={style.recent_book_left}>
+                  <div className={style.recent_book_image}></div>
+                </div>
+                  <div className={style.recent_book_right}>
+                    <h3>{recentBook[recentBook.length-1].title}</h3>
+                    <p className={style.recent_book_content}>{recentBook[recentBook.length-1].date}</p>
+                  </div>
+              </div>
+              <button className={style.read_button}>마저 읽기</button>
+            </div>
+          )
+          }
         </div>   
       </div>
         <div id='책추천' className={style.list_container}>

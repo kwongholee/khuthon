@@ -7,7 +7,7 @@
     height: 100vh;
 }
 
-p {
+.genre_title {
     width: 1255px;
     height: 53px;
     flex-shrink: 0;

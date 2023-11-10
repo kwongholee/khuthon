@@ -54,7 +54,7 @@ app.get('/login/redirect', passport.authenticate('google'), async (req, res) => 
         res.redirect(`/register/profile/${req.user.id}`)
       }
       else{
-        res.redirect('/main')
+        res.redirect('/mainpage')
       }
     })
   } catch (err) {
@@ -163,17 +163,17 @@ app.get('/mypage/:userid', (req,res)=>{
     result  = res2
     book = result.book
     bookArray = []
-      for (i=0; i<book.length; i++){
-        db.collection('book').findOne({id:book[i]}, (err, res2)=>{
-          foundBook = res2
-        })
-        bookArray.push({
-          "bookId" : book[i].bookId,
-          "title" : foundBook.title,
-          "date": book[i].date,
-          "bookImage" :foundBook.bookImage
-        })
-      }
+    for (i=0; i<book.length; i++){
+      db.collection('book').findOne({id:book[i]}, (err, res2)=>{
+        foundBook = res2
+      })
+      bookArray.push({
+        "bookId" : book[i].bookId,
+        "title" : foundBook.title,
+        "date": book[i].date,
+        "bookImage" :foundBook.bookImage
+      })
+    }
     db.collection('quiz').find({userId: req.params.userid}).limit(2).toArray((err,res3)=>{
       quizArray = res3
       db.collection('word').find({userId: req.params.userid}).limit(6).toArray((err,res4)=>{
