@@ -10,6 +10,7 @@ const app = express();
 const MongoClient = require('mongodb').MongoClient
 const mongodb = require('mongodb');
 const {execSync} = require('child_process')
+const {ObjectId} = require('mongodb')
 const fs = require('fs')
 
 app.use(express.urlencoded({extended: true}))
@@ -225,6 +226,10 @@ app.get('/mypage/:userid', (req,res)=>{
   })
 })
 
+app.put('/book/userid/bookid',(req,res)=>{
+
+})
+
 app.get('/wordlist/:userid', (req, res)=>{
   db.collection('user').findOne({id:'111695717319585087284'}, (err, result)=>{
     console.log(result.lang)
@@ -280,7 +285,7 @@ app.post('/quiz/result', (req, res)=>{
 })
 
 app.get('/quiz/:bookid', (req, res)=>{
-  db.collection('book').findOne({_id:req.params.bookid}, (err, result)=>{
+  db.collection('book').findOne({_id:ObjectId(req.params.bookid)}, (err, result)=>{
     res.send({"title":result.title, "bookImage":result.bookImage})
   })
 })
@@ -311,34 +316,64 @@ app.get('/quiz/:userid', (req,res)=>{
 
 app.put('/book/:userid/:bookid', (req,res)=>{
   db.collection('user').findOne({id: req.params.userid},(err,result)=>{
-    bookArray = [...result.book]
-    for(i=0; i<bookArray.length; i++){
-      if(bookArray[i].bookId == req.params.bookid){
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0'); 
-        const day = String(now.getDate()).padStart(2, '0');
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        bookArray[i].date = formattedDateTime
-        bookArray[i].page = req.body.page
-        break
+    if(result.book!=null){
+      bookArray = [...result.book]
+      foundBook = false
+      for(i=0; i<bookArray.length; i++){
+        if(bookArray[i].bookId == req.params.bookid){
+          const now = new Date();
+          const year = now.getFullYear();
+          const month = String(now.getMonth() + 1).padStart(2, '0'); 
+          const day = String(now.getDate()).padStart(2, '0');
+          const hours = String(now.getHours()).padStart(2, '0');
+          const minutes = String(now.getMinutes()).padStart(2, '0');
+          const seconds = String(now.getSeconds()).padStart(2, '0');
+          const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+          bookArray[i].date = formattedDateTime
+          bookArray[i].position = req.body.position
+          foundBook = true
+          break
+        }
+        if(foundBook==false){
+          const now = new Date();
+          const year = now.getFullYear();
+          const month = String(now.getMonth() + 1).padStart(2, '0'); 
+          const day = String(now.getDate()).padStart(2, '0');
+          const hours = String(now.getHours()).padStart(2, '0');
+          const minutes = String(now.getMinutes()).padStart(2, '0');
+          const seconds = String(now.getSeconds()).padStart(2, '0');
+          const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+          bookArray.push({"postion":req.body.position, "bookId":req.params.bookid, "date":formattedDateTime})
+        }
       }
+      db.collection('user').updateOne({id: req.params.userid},{$set:{
+        book : bookArray
+      }})
     }
-    db.collection('user').updateOne({id: req.params.userid},{$set:{
-      book : bookArray
-    }})
+    else{
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0'); 
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      bookArray.push({"postion":req.body.position, "bookId":req.params.bookid, "date":formattedDateTime})
+    }
   })
 })
 
 var startTime = 0
 
+app.post('/book', (req,res)=>{
+})
+
 app.get('/book', (req,res)=>{
   var startTime = new Date()
   res.status(200)
 })
+
 
 app.post('/book/word/:userid/:bookid',async (req,res)=>{
   let lang;
@@ -424,44 +459,27 @@ app.get('/book/word/:userid/:bookid',(req,res)=>{
   res.send({"time": executionTime})
 })
 
-app.get('/test',(err,res)=>{
-  lang="eng"
-  inputArray=[["minah",0],["hamster",3],["water",2],["bottle",0],["hello",0],["handkerchief",0]]
-  pythonPath = path.resolve(__dirname,`./make_quiz_${lang}.py`)
-  let result;
-  try {
-    result = execSync(`python3 ${pythonPath} '${JSON.stringify(inputArray)}'`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
-    result = result.trim()
-    result = eval(result)
-    console.log(result)
-  } catch (error) {
-      console.error('에러:', error.message);
-  }
-})
-
-app.post('/quiz/word/:userid',(req,res)=>{
-  db.collection('book').findOne({_id:req.body.bookId},(err,result)=>{
+app.get('/quiz/word/:userid',(req,res)=>{
+  db.collection('book').findOne({_id:ObjectId(req.body.bookId)},(err,result)=>{
     inputArray = []
     let lang;
-    // for(i=0; i<req.body.word.length; i++){
-    //   db.collection('word').findOne({word:req.body.word[i]},(err,res2)=>{
-    //     inputArray.push([req.body.word[i],res2.testNum])
-    //     lang = res2.lang
-    //   })
-    // }
-    lang="eng"
-    inputArray=[["apple",0],["hamster",3],["water",2],["bottle",0],["hello",0],["handkerchief",0]]
+    for(i=0; i<req.body.word.length; i++){
+      db.collection('word').findOne({word:req.body.word[i]},(err,res2)=>{
+        inputArray.push([req.body.word[i],res2.testNum])
+        lang = res2.lang
+      })
+    }
+    lang="kor"
     pythonPath = path.resolve(__dirname,`./make_quiz_${lang}.py`)
     let pyResult;
     try {
       pyResult = execSync(`python3 ${pythonPath} '${JSON.stringify(inputArray)}'`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
       pyResult = pyResult.trim()
       pyResult = eval(pyResult)
-      console.log(pyResult)
+      res.send({"quiz":pyResult, "bookId":req.body.bookId, "bookImage":result.bookImage})
     } catch (error) {
         console.error('에러:', error.message);
     }
-    res.send({"quiz":quizArray, "bookId":bookId, "bookImage":bookImage})
   })
 })
 
