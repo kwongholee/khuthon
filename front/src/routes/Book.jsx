@@ -59,17 +59,14 @@ function Book() {
               .catch((err) => {
                   console.log(err)
               })
-            // axios.get(`/book`)
-            // .then((res) => {
-            //   navigate(`/mypage/${userId}`)
-            // })
-            // .catch((err) => {
-            //     console.log(err)
-            // })
+            axios.get(`/book`)
+            .then((res) => {
+              navigate(`/mypage/${userId}`)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
         }}>읽기 완료</button>
-      <button className={style.tmp_button}onClick={() => {
-        navigate('/') 
-        console.log(currentPosition)}}>임시버튼이삼</button>
       <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
     </div>
   );

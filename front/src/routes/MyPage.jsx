@@ -4,10 +4,12 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import LeftBtn from '../components/LeftBtn'
 import RightBtn from '../components/RightBtn'
+import { useNavigate } from 'react-router-dom';
 
 export default function MyPage() {
   let image = useSelector((state) => state.user.image);
   let userId = useSelector((state) => state.user.userId);
+  let navigate = useNavigate()
   let [userInfo, setUserInfo] = useState({
     name : '',
     age : '',
@@ -96,7 +98,8 @@ export default function MyPage() {
           <div>
             <div style={{display: 'flex', justifyContent:'space-between', alignItems:"flex-end", width: '616px'}}>
               <div className={style.list_title}> 최근에 응시한 퀴즈</div>
-              <button className={style.plus_button}>더보기</button>
+              <button className={style.plus_button}
+              onClick={() => {navigate(`/quiz?page=1`)}}>더보기</button>
             </div>
             <div className={style.quiz_container}>
               <div className={style.book}></div>
@@ -106,7 +109,8 @@ export default function MyPage() {
           <div>
             <div style={{display: 'flex', justifyContent:'space-between', alignItems:"flex-end", width: '616px'}}>
               <div className={style.list_title}> 최근에 저장한 단어</div>
-              <button className={style.plus_button}>더보기</button>
+              <button className={style.plus_button}
+              onClick={() => {navigate(`/showwordlist/${userId}?page=1`)}}>더보기</button>
             </div>
             <div className={style.quiz_container}>
               <div>

@@ -14,7 +14,7 @@ import { BsFillArrowLeftCircleFill, BsFillArrowRightCircleFill } from 'react-ico
 export default function QuizDetail() {
     let dispatch = useDispatch();
     let realanswer = useSelector((state) => state.answer.realanswer)
-    let answer = useSelector((state) => state.answer.answer)
+    let Answer = useSelector((state) => state.answer.answer)
     let rightCnt = useSelector((state) => state.answer.cnt)
     let quiz = useSelector((state) => state.quiz.quiz);
     let submitanswer = useSelector((state) => state.submitAnswer.submitAnswer)
@@ -42,10 +42,10 @@ export default function QuizDetail() {
                         <input type="text" onChange={(e) => {setValue(e.target.value)}} />
                         <button onClick={() => {dispatch(answer(value))}}>해당 문제의 답 제출</button>
                     </div>
-                    {parseInt(searchParams.get("page")) !== answer.length ? <BsFillArrowRightCircleFill className={style.left_icon} onClick={() => {setSearchParams("page", parseInt(searchParams.get("page"))+1)}} /> : null}
+                    {parseInt(searchParams.get("page")) !== Answer.length ? <BsFillArrowRightCircleFill className={style.left_icon} onClick={() => {setSearchParams("page", parseInt(searchParams.get("page"))+1)}} /> : null}
                 </div>
                 <div>
-                    {parseInt(searchParams.get("page")) === answer.length ? <div className={style.completeBtn} onClick={async () => {
+                    {parseInt(searchParams.get("page")) === Answer.length ? <div className={style.completeBtn} onClick={async () => {
                         console.log(submitanswer);
                         await dispatch(checkAnswer(submitanswer));
                         console.log(rightCnt, realanswer);

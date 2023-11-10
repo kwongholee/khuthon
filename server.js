@@ -9,8 +9,8 @@ const session = require("express-session");
 const app = express();
 const MongoClient = require('mongodb').MongoClient
 const mongodb = require('mongodb');
-const {ObjectId} = require('mongodb')
 const {execSync} = require('child_process')
+const {ObjectId} = require('mongodb')
 const fs = require('fs')
 
 app.use(express.urlencoded({extended: true}))
@@ -41,7 +41,7 @@ MongoClient.connect(process.env.DB,{useUnifiedTopology: true}, function(err, cli
     })
 })
 
-app.get('/main/:userid',(req, res)=>{
+app.get('/main',(req, res)=>{
   db.collection('user').findOne({id:req.user.id}, (err,result)=>{
     lang = result.lang
     db.collection('book').find().toArray((err,result2)=>{
@@ -218,8 +218,7 @@ app.get('/mypage/:userid', (req,res)=>{
             "age" : result.age,
             "lang" : result.lang,
             "level" : level,
-            "userId" : result.id,
-            "position" : 0
+            "userId" : result.id
           },
           "book": bookArray,
           "quiz" : quizArray,
@@ -230,11 +229,8 @@ app.get('/mypage/:userid', (req,res)=>{
   })
 })
 
-app.put('/mypage/:userid',(req,res)=>{
-  db.collection('user').updateOne({id:req.params.userid},{$set:{
-    position : req.body.position
-  }})
-  console.log(req.body.position)
+app.put('/book/userid/bookid',(req,res)=>{
+
 })
 
 app.get('/wordlist/:userid', (req, res)=>{
@@ -259,7 +255,6 @@ app.get('/wordlist/:userid', (req, res)=>{
 })
 
 app.post('/quiz/result', (req, res)=>{
-  console.log(req.user.id);
   now = new Date();
   year = now.getFullYear();
   month = now.getMonth() + 1;
@@ -290,9 +285,6 @@ app.post('/quiz/result', (req, res)=>{
       })
     }
   }
-  db.collection('quiz').findOne({userId: req.user.id, bookId: req.body.bookId}, (err,result) => {
-    res.redirect('/quiz/result/' + result._id);
-  })
 })
 
 app.get('/quiz/:bookid', (req, res)=>{
@@ -388,7 +380,6 @@ app.post('/book', (req,res)=>{
   var startTime = new Date()
   res.status(200)
 })
-
 
 app.post('/book/word/:userid/:bookid',async (req,res)=>{
   let lang;
