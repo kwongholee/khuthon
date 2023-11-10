@@ -4,10 +4,15 @@ import Logo from '../components/Logo';
 import LeftBtn from '../components/LeftBtn'
 import RightBtn from '../components/RightBtn'
 import { useNavigate } from 'react-router-dom';
-import useSelector, { useDispatch } from 'react-redux'
+import {useSelector,  useDispatch } from 'react-redux'
+import { setLang } from '../redux/user';
 
 export default function Main() {
   let navigate =  useNavigate();
+  let dispatch = useDispatch();
+
+  let userId = useSelector((state) => state.user.userId);
+  let lang = useSelector((state) => state.user.lang);
 
   const recommend_books = [
     { title: '책 제목 1' },
@@ -24,6 +29,8 @@ export default function Main() {
     { title: '책 제목 5' },
   ];
 
+
+
   return (
     <div className={style.main_background}> 
       <div id='위에 div' className={style.first_container}>
@@ -39,24 +46,23 @@ export default function Main() {
                   <option>영어</option>
                 </select>
                 <button className={style.logout_button}
-                onClick={() => {
-                    axios.get('/logout')
-                    .then((res) => {
-                        navigate('/')                        
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-                  }}>로그아웃</button>
+                onClick={async () => {
+                  try {
+                    const res = await axios.get(`/logout`);
+                    navigate(`/`);
+                  } catch (err) {
+                    console.error(err);
+                  }
+                }}>로그아웃</button>
               </div>
               
             </div>
           </div>
         <div className={style.recent_book}>
-          <p></p>
+          <p className={style.recent_none}> 읽은 책이 아직 없어요.</p>
         </div>   
       </div>
-        <div className={style.list_container}>
+        <div id='책추천' className={style.list_container}>
           <div className={style.list_title}>이런 책은 어떠세요?</div>
           <LeftBtn className={style.left_icon}></LeftBtn>
           <RightBtn className={style.right_icon}></RightBtn>
@@ -71,7 +77,7 @@ export default function Main() {
             }
           </div>   
         </div>
-        <div className={style.list_container}>
+        <div id='책목록' className={style.list_container}>
           <div className={style.list_title}>책 목록</div>
           <LeftBtn className={style.left_icon}></LeftBtn>
           <RightBtn className={style.right_icon}></RightBtn>
