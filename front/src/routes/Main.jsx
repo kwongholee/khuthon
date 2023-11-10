@@ -3,10 +3,11 @@ import axios from "axios"
 import Logo from '../components/Logo';
 import LeftBtn from '../components/LeftBtn'
 import RightBtn from '../components/RightBtn'
+import { useNavigate } from 'react-router-dom';
+import useSelector, { useDispatch } from 'react-redux'
 
-
-//userid 묻는 get 요청 하나 쏘기, 등록하면 post도 쏘기
 export default function Main() {
+  let navigate =  useNavigate();
 
   const recommend_books = [
     { title: '책 제목 1' },
@@ -22,7 +23,7 @@ export default function Main() {
     { title: '책 제목 4' },
     { title: '책 제목 5' },
   ];
-  
+
   return (
     <div className={style.main_background}> 
       <div id='위에 div' className={style.first_container}>
@@ -40,13 +41,8 @@ export default function Main() {
                 <button className={style.logout_button}
                 onClick={() => {
                     axios.get('/logout')
-                    .then((result) => {
-                        if (result.data) {
-                            console.log('성공')
-                        }
-                        else { 
-                            console.log('실패')
-                        }
+                    .then((res) => {
+                        navigate('/')                        
                     })
                     .catch((err) => {
                         console.log(err)
@@ -56,7 +52,9 @@ export default function Main() {
               
             </div>
           </div>
-        <div id='최근에 읽은 책' className={style.recent_book}></div>   
+        <div className={style.recent_book}>
+          <p></p>
+        </div>   
       </div>
         <div className={style.list_container}>
           <div className={style.list_title}>이런 책은 어떠세요?</div>
