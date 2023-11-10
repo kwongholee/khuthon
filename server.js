@@ -214,7 +214,7 @@ app.get('/wordlist/:userid', (req, res)=>{
   })
 })
 
-app.put('/quiz/result/:quizid', (req, res)=>{
+app.post('/quiz/result', (req, res)=>{
 now = new Date();
 year = now.getFullYear();
 month = now.getMonth() + 1;
