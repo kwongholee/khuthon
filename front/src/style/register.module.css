@@ -44,6 +44,7 @@
 
 .alert_name {
     color: #FF0101;
+    text-align: center;
     font-family: Inter;
     font-size: 16px;
     font-style: normal;
@@ -54,6 +55,7 @@
 
 .good_name {
     color: rgb(5, 195, 24);
+    text-align: center;
     font-family: Inter;
     font-size: 16px;
     font-style: normal;

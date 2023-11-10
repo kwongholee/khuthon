@@ -2,7 +2,7 @@ import { configureStore, createSlice } from '@reduxjs/toolkit'
 
 
 // userId redux
-let user = createSlice( {
+export const user = createSlice( {
   name: 'user',
   initialState: {userId : '', lang : ''},
   reducers: {
@@ -16,8 +16,4 @@ let user = createSlice( {
 })
 
 export const {setUserId, setLang} = user.actions
-export default configureStore({
-  reducer: {
-    userId : userId.reducer
-  }
-}) 
+export default user.reducer
