@@ -6,19 +6,25 @@ import { useEffect, useState } from 'react';
 import LeftBtn from '../components/LeftBtn';
 import RightBtn from '../components/RightBtn';
 import WordlistModal from '../components/WordlistModal';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
 export default function Wordlist() {
-  // let dispatch = useDispatch();
   let {userid} = useParams();
-  let [search, setSearch] = useState('');
-  let [word, setWord] = useState([1,2,3,4,5]);
-  let [definition, setDefinition] = useState([]);
+  let [word, setWord] = useState([]);
   let [idx, setIdx] = useState(-1);
   let data = useSelector((state) => state.word.word)
   let show = useSelector((state) => state.show.show)
+  let [searchParams, setSearchParams] = useSearchParams();
+    const fetch = async () => {
+        return await axios.get('/wordlist/' + userid + "?page=" + searchParams.get("page"));
+    }
+
+    useEffect(() => {
+        let copy = [...fetch.wordList];
+        setWord(copy);
+    })
 
   return(
     <div>
@@ -39,7 +45,7 @@ export default function Wordlist() {
                 return(
                   <div key={i} onClick={() => {setIdx(i);}}>
                     <Word word={a}></Word>
-                    {idx === i && show ? <WordlistModal></WordlistModal> : null}
+                    {idx === i && show ? <WordlistModal word={a}></WordlistModal> : null}
                   </div>
                 )
               })

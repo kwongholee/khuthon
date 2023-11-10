@@ -461,6 +461,7 @@ app.post('/quiz/word/:userid',(req,res)=>{
     } catch (error) {
         console.error('에러:', error.message);
     }
+    quizArray = [["hi", "a"], ["hi", "b"], ["hi", "c"]]
     res.send({"quiz":quizArray, "bookId":bookId, "bookImage":bookImage})
   })
 })
