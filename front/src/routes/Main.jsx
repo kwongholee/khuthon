@@ -42,34 +42,34 @@ export default function Main() {
     else
       dispatch(setLang('eng'))
   }
-  const fetchUserId = async () => {
+
+
+  const fetchUserInfo = async () => {
     try {
       const response = await axios.get('/authorization');
       const serverUserId = response.data.userid;
+      const serverImage = response.data.profileImage
       dispatch(setUserId(serverUserId));
-      console.log(userId)
+      dispatch(setImage(serverImage))
     } catch (error) {
       console.error(error);
     }
   };
 
   //프사랑 언어랑 최근 읽은 책 가져오기
-  const fetchUserInfo = async () => {
+  const fetchUserLang = async () => {
     try {
       const response = await axios.get(`/mypage/${userId}`);
       const serverLang = response.data.user.lang
-      const serverImage = response.data.user.profileImage
       const serverRecentBook = response.data.book
       dispatch(setLang(serverLang));
       dispatch(addRecentBook(serverRecentBook));
-      dispatch(setImage(serverImage))
       console.log(recentBook)
     } catch (error) {
       console.error(error);
     }
   };  
   useEffect(() => {
-    fetchUserId()
     fetchUserInfo()
   }, [])
 
@@ -82,13 +82,23 @@ export default function Main() {
           </div>
             <div id='사진, 언어, 로그아웃' className={style.profile}>
               <div id='프로필' className={style.profile_left}>
-                <img src={'/profile-' + image + '.png'} className={style.profile_image}></img>
+                <img src={'/profile-' + image + '.png'} className={style.profile_image}
+                onClick={() => {
+                  axios.get(`/mypage/${userId}`)
+                  .then((res) => {
+                    navigate(`/mypage/${userId}`)
+                  })
+                  .catch((err) => {
+                      console.log(err)
+                  })
+                }}></img>
               </div>
               <div id='언어, 로그아웃' className={style.profile_right}>
-                <select className={style.select_language} onChange={onSelect}>
-                  <option>한국어</option>
-                  <option>영어</option>
-                </select>
+                  <select className={style.select_language} onChange={onSelect}>
+                    <option>한국어</option>
+                    <option>영어</option>
+                  </select>
+
                 <button className={style.logout_button}
                 onClick={async () => {
                   try {
@@ -114,7 +124,7 @@ export default function Main() {
             <div>
               <div className={style.recent_book}>
                 <div className={style.recent_book_left}>
-                  <div className={style.recent_book_image}></div>
+                  <img src={recentBook[recentBook.length-1].bookImage} className={style.recent_book_image}></img>
                 </div>
                   <div className={style.recent_book_right}>
                     <h3>{recentBook[recentBook.length-1].title}</h3>
@@ -123,7 +133,7 @@ export default function Main() {
               </div>
               <button className={style.read_button}
                 onClick={() => {
-                  axios.post('/book')
+                  axios.get('/book')
                   .then(res => {
                     navigate(`/book/${bookId}`)
                   })
@@ -154,7 +164,7 @@ export default function Main() {
           </div>   
         </div>
         <div id='책목록' className={style.list_container}>
-          <div className={style.list_title}>책 목록</div>
+          <div className={style.list_title}>현재 읽을 수 있어요!</div>
           <LeftBtn className={style.left_icon}></LeftBtn>
           <RightBtn className={style.right_icon}></RightBtn>
           <div className={style.book_list}>

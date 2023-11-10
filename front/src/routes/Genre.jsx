@@ -110,8 +110,9 @@ export default function Genre() {
             style={{ background: isActive[11] ? 'lightgray' : 'white' }}>수학</button>
         </div>
       </div>
+      {trueCount != 3 ? (<p className={style.alert_name}> 장르를 3개 선택해야합니다!</p>) : (<p className={style.good_name}> 좋습니다! </p>)}
       <button
-        className='버튼'
+        className={style.create_button}
         onClick={async () => {
           if (trueCount === 3) {
             try {
@@ -125,7 +126,7 @@ export default function Genre() {
 
                 
                     await axios.put(`/register/genre/${userId}`, updatedGenre);
-                    navigate(`/mainpage`);
+                    navigate(`/mainpage/${userId}`);
             } catch (err) {
                 console.error(err);
             }

@@ -20,6 +20,7 @@
     width: 80%;
     height: 80%;
     margin: 0 10px;
+    cursor: pointer;
 }
 
 .name_container {
@@ -90,6 +91,7 @@
 .age_select {
     width: 200px;
     height: 40px;
+    cursor: pointer;
 
     color: #828282;
     text-align: center;
@@ -113,6 +115,8 @@
     height: 53px;
     margin: 0 10px 0 10px;
     color: black;
+    cursor: pointer;
+
     background-color: white;
     border: #83B099 2px solid;
     text-align: center;
@@ -129,6 +133,8 @@
 .complete_button {
     width: 195px;
     height: 70px;
+    cursor: pointer;
+
     margin: 0 10px 0 10px;
     border-radius: 10px;
     background: #E0D2B8;
