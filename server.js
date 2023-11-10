@@ -225,23 +225,24 @@ app.get('/mypage/:userid', (req,res)=>{
   })
 })
 
-app.get('/wordlist/:userid/:bookid', (req, res)=>{
-  let lang;
-  db.collection('user').findOne({id:req.params.userid}, (err, (result)=>[
-    lang = res2.lang
-  ]))
-  page = int(req.query.page)
-  db.collection('word').find({userId: req.params.userid, lang:lang, bookId: req.params.bookid}).skip((page-1)*10).limit(10).toArray((err,result)=>{
-    wordArray = []
-    if (result.length!=0){
-      for (i=0; i<result.length; i++){
-        wordArray.push({"word":result[i].word[0], "wordId":result[i]._id, "bookId": result[i].bookId})
+app.get('/wordlist/:userid', (req, res)=>{
+  db.collection('user').findOne({id:'111695717319585087284'}, (err, result)=>{
+    console.log(result.lang)
+    lang = result.lang
+    page = parseInt(req.query.page,10)
+    db.collection('word').find({userId: req.params.userid, lang:lang}).sort({ bookId: 1 }).skip((page-1)*10).limit(10).toArray((err,result)=>{
+      wordArray = []
+      console.log(result)
+      if (result.length!=0){
+        for (i=0; i<result.length; i++){
+          wordArray.push({"word":result[i].word[0], "wordId":result[i]._id, "bookId": result[i].bookId})
+        }
+        res.send({"wordList":wordArray})
       }
-      res.send({"wordList":wordArray})
-    }
-    else{
-      res.status(400)
-    }
+      else{
+        res.status(400)
+      }
+    })
   })
 })
 
@@ -267,7 +268,7 @@ app.post('/quiz/result', (req, res)=>{
   for(i=0; i<req.body.result.length; i++){
     word = req.body.result[i].word
     right = req.body.result[i].right
-    if (right==false){
+    if (right==0){
       db.collection('word').updateOne({word:word}, {$inc: {testNum:1}})
     }
     else{
@@ -334,7 +335,7 @@ app.put('/book/:userid/:bookid', (req,res)=>{
 
 var startTime = 0
 
-app.post('/book', (req,res)=>{
+app.get('/book', (req,res)=>{
   var startTime = new Date()
   res.status(200)
 })
