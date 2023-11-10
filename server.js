@@ -43,7 +43,10 @@ MongoClient.connect(process.env.DB,{useUnifiedTopology: true}, function(err, cli
 
 app.get('/main/:userid',(req, res)=>{
   db.collection('user').findOne({id:req.user.id}, (err,result)=>{
-    res.send(result)
+    lang = result.lang
+    db.collection('book').find().toArray((err,result2)=>{
+      res.send({"user": result, "book": result2 })
+    })
   })
 })
 
@@ -240,7 +243,7 @@ app.get('/wordlist/:userid', (req, res)=>{
       console.log(result)
       if (result.length!=0){
         for (i=0; i<result.length; i++){
-          wordArray.push({"word":result[i].word[0], "wordId":result[i]._id, "bookId": result[i].bookId})
+          wordArray.push({"word":result[i].word, "wordId":result[i]._id, "bookId": result[i].bookId})
         }
         res.send({"wordList":wordArray})
       }
