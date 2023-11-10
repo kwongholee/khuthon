@@ -21,7 +21,6 @@ export default function Wordlist() {
 
   const fetch = async () => {
       const data = await axios.get('/wordlist/' + userid + "?page=" + searchParams.get("page"));
-      console.log(data.data.wordList);
       setWord(data.data.wordList);
   }
 

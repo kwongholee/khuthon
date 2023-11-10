@@ -11,7 +11,7 @@ export const answer = createSlice({
             for(let i = 0; i < state.answer.length; i++) {
                 if(action.payload[i] === state.answer[i]) {
                     state.answer.push({word: state.answer[i], right: true})
-                    state.cnt++;
+                    state.cnt += 1;
                 }
                 else {
                     state.answer.push({word: state.answer[i], right: false})

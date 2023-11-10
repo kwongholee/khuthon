@@ -10,15 +10,29 @@ export default function Word(props) {
     let [isCheck, setCheck] = useState(false);
     let dispatch = useDispatch();
     let [define, setDefine] = useState([]);
+    let parser = new DOMParser();
 
     const fetch = async () => {
-        return await axios.get('/사전api');
+        let data = await axios.get('https://krdict.korean.go.kr/api/search?key=84C4A55498149C96AC09E05BEC597B13&q=' + props.word);
+        let xmlDoc = parser.parseFromString(data, 'text/xml');
+        let arr = [];
+        let channel = xmlDoc.querySelector('channel')
+        console.log(channel);
+        let items = xmlDoc.querySelectorAll('item');
+        console.log(items);
+        items.forEach((a) => {
+            const sense = a.querySelector('sense');
+            console.log(sense)
+            const definition = sense.querySelector('definition');
+            console.log(definition)
+            arr.push(definition);
+        })
+        setDefine(arr);
     }
 
     useEffect(() => {
-        let copy = fetch.description
-        setDefine(copy)
-    })
+        fetch();
+    }, [])
 
     return(
         <div>
@@ -30,7 +44,7 @@ export default function Word(props) {
                 </div>
                 <div style={{borderBottom: '#D3D3D3 1px solid', borderRight: '#D3D3D3 1px solid', width: '69.6%', float: 'right', cursor: 'pointer'}} onClick={() => {
                     dispatch(openModal())                    
-                }}>{define}</div>
+                }}>{define[0]}</div>
             </div>
         </div>
     )
