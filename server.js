@@ -215,7 +215,8 @@ app.get('/mypage/:userid', (req,res)=>{
             "age" : result.age,
             "lang" : result.lang,
             "level" : level,
-            "userId" : result.id
+            "userId" : result.id,
+            "position" : 0
           },
           "book": bookArray,
           "quiz" : quizArray,
@@ -226,8 +227,14 @@ app.get('/mypage/:userid', (req,res)=>{
   })
 })
 
+app.put('/mypage/:userid',(req,res)=>{
+  db.collection('user').updateOne({id:req.params.userid},{$set:{
+    position : req.body.position
+  }})
+  console.log(req.body.position)
+})
+
 app.get('/wordlist/:userid', (req, res)=>{
-  console.log('hi');
   db.collection('user').findOne({id:'111695717319585087284'}, (err, result)=>{
     console.log(result.lang)
     lang = result.lang
@@ -329,7 +336,7 @@ app.put('/book/:userid/:bookid', (req,res)=>{
         const seconds = String(now.getSeconds()).padStart(2, '0');
         const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         bookArray[i].date = formattedDateTime
-        bookArray[i].page = req.body.page
+        bookArray[i].position = req.body.position
         break
       }
     }
@@ -342,6 +349,10 @@ app.put('/book/:userid/:bookid', (req,res)=>{
 var startTime = 0
 
 app.get('/book', (req,res)=>{
+  res.send('hi')
+})
+
+app.post('/book', (req,res)=>{
   var startTime = new Date()
   res.status(200)
 })

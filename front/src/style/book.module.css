@@ -1,0 +1,40 @@
+.cancel_button {
+    position: fixed;
+    top: 10%;
+    left: 5%;
+    width: 130px;
+    height: 50px;
+    border-radius: 10px;
+    background: #83B0A4;
+    color: #000;
+    text-align: center;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.end_button {
+    position: fixed;
+    top: 10%;
+    right: 5%;
+    width: 130px;
+    height: 50px;
+    border-radius: 10px;
+    background: #83B0A4;
+    color: #000;
+    text-align: center;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.tmp_button {
+    position: fixed;
+    top: 50%;
+    left :50%;
+}
+
+html { height: 100%; overflow:auto; }
+body { height: 100%; }
