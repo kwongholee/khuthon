@@ -4,9 +4,18 @@ import {useDispatch, useSelector} from 'react-redux'
 import axios from "axios"
 import { closeModal } from "../redux/showModal";
 
-export default function WordlistModal() {
-    let [define, setDefine] = useState([{definition: 'def', example: 'exa'}]);
+export default function WordlistModal(props) {
+    let [define, setDefine] = useState([]);
     let dispatch = useDispatch();
+    
+    const fetch = async () => {
+        return await axios.get('/사전api');
+    }
+
+    useEffect(() => {
+        let copy = fetch.description
+        setDefine(copy)
+    })
 
     return(
         <div>
