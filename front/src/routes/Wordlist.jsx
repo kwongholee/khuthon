@@ -9,13 +9,16 @@ import LeftBtn from '../components/LeftBtn';
 import RightBtn from '../components/RightBtn';
 import WordlistModal from '../components/WordlistModal';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { openModal } from '../redux/showModal';
 
 export default function Wordlist() {
+  let dispatch = useDispatch();
+  let show = useSelector((state) => state.showModal.value)
   let {userid} = useParams();
   let [search, setSearch] = useState('');
   let [word, setWord] = useState([]);
   let [idx, setIdx] = useState(-1);
-  let [show, setShow] = useState(true);
 
   useEffect(() => {
     setWord([1,2,3,4,5]);
@@ -45,9 +48,9 @@ export default function Wordlist() {
             {
               word.map((a,i) => {
                 return(
-                  <div key={i} onClick={() => {setIdx(i)}}>
+                  <div key={i} onClick={() => {setIdx(i); dispatch(openModal())}}>
                     <Word word={a}></Word>
-                    {idx === i ? <WordlistModal></WordlistModal> : null}
+                    {idx === i && show ? <WordlistModal></WordlistModal> : null}
                   </div>
                 )
               })

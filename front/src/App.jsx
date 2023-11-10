@@ -11,7 +11,6 @@ import Genre from './routes/Genre';
 import QuizDetail from './routes/QuizDetail';
 import QuizStart from './routes/QuizStart';
 import QuizResult from './routes/QuizResult';
-
 import {Routes, Route} from 'react-router-dom'
 
 function App() {
