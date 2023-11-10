@@ -179,14 +179,13 @@ export default function Main() {
           <RightBtn className={style.right_icon}></RightBtn>
           <div className={style.recommend_book}>
             {
-              recommend_books.map((book, index) => (
+            books.slice(7, 11).map((book, index) => (
                 <div key={index} className={style.book_container}>
-                  <div className={style.book}></div>
-                  <p className={style.book_title}>{book.title}</p>
+                  <img className={style.book_image} src={books[index].bookImage} alt={books[index].korTitle} />
+                  <p className={style.book_title}>{books[index].korTitle}</p>
                 </div>
-              ))
-            }
-          </div>   
+              ))}
+            </div>   
         </div>
         <div id='책목록' className={style.list_container}>
           <div className={style.list_title}>현재 읽을 수 있어요!</div>
