@@ -6,6 +6,7 @@ import {show} from './showModal'
 import { answer } from './answer'
 import {submitAnswer} from './submitAnswer'
 import {quiz} from './quiz'
+import {page} from './page'
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     answer: answer.reducer,
     submitAnswer: submitAnswer.reducer,
     quiz: quiz.reducer,
+    page: page.reducer,
    }
 }) 

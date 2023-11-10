@@ -9,6 +9,7 @@ const session = require("express-session");
 const app = express();
 const MongoClient = require('mongodb').MongoClient
 const mongodb = require('mongodb');
+const {ObjectId} = require('mongodb')
 const {execSync} = require('child_process')
 const {ObjectId} = require('mongodb')
 const fs = require('fs')
@@ -215,7 +216,8 @@ app.get('/mypage/:userid', (req,res)=>{
             "age" : result.age,
             "lang" : result.lang,
             "level" : level,
-            "userId" : result.id
+            "userId" : result.id,
+            "position" : 0
           },
           "book": bookArray,
           "quiz" : quizArray,
@@ -226,8 +228,11 @@ app.get('/mypage/:userid', (req,res)=>{
   })
 })
 
-app.put('/book/userid/bookid',(req,res)=>{
-
+app.put('/mypage/:userid',(req,res)=>{
+  db.collection('user').updateOne({id:req.params.userid},{$set:{
+    position : req.body.position
+  }})
+  console.log(req.body.position)
 })
 
 app.get('/wordlist/:userid', (req, res)=>{
@@ -252,6 +257,7 @@ app.get('/wordlist/:userid', (req, res)=>{
 })
 
 app.post('/quiz/result', (req, res)=>{
+  console.log(req.user.id);
   now = new Date();
   year = now.getFullYear();
   month = now.getMonth() + 1;
@@ -282,11 +288,14 @@ app.post('/quiz/result', (req, res)=>{
       })
     }
   }
+  db.collection('quiz').findOne({userId: req.user.id, bookId: req.body.bookId}, (err,result) => {
+    res.redirect('/quiz/result/' + result._id);
+  })
 })
 
 app.get('/quiz/:bookid', (req, res)=>{
   db.collection('book').findOne({_id:ObjectId(req.params.bookid)}, (err, result)=>{
-    res.send({"title":result.title, "bookImage":result.bookImage})
+    res.send({"title":result.engTitle, "bookImage":result.bookImage})
   })
 })
 
@@ -370,6 +379,10 @@ app.post('/book', (req,res)=>{
 })
 
 app.get('/book', (req,res)=>{
+  res.send('hi')
+})
+
+app.post('/book', (req,res)=>{
   var startTime = new Date()
   res.status(200)
 })
@@ -480,6 +493,8 @@ app.get('/quiz/word/:userid',(req,res)=>{
     } catch (error) {
         console.error('에러:', error.message);
     }
+    quizArray = [["hi", "a"], ["hi", "b"], ["hi", "c"]]
+    res.send({"quiz":quizArray, "bookId": req.body.bookId, "bookImage": result.bookImage})
   })
 })
 
