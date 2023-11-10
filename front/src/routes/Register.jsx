@@ -81,8 +81,7 @@ export default function Register() {
             } catch (err) {
               console.error(err);
             }
-          }}>이전
-        </button>
+          }}>이전</button>
           <button className={style.complete_button}
           onClick={() => {
             if(nickname!='' && language!='') {
