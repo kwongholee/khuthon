@@ -17,6 +17,9 @@ export default function Quiz() {
       <div className='background'>
         {1 == 0 ? <LeftBtn></LeftBtn> : null}
         <WordList></WordList>
+        <WordList></WordList>
+        <WordList></WordList>
+        <WordList></WordList>
         {1 == 0 ? <RightBtn></RightBtn> : null}
       </div>
     </div>

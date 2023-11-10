@@ -8,11 +8,14 @@ import {FaSearch} from 'react-icons/fa'
 import LeftBtn from '../components/LeftBtn';
 import RightBtn from '../components/RightBtn';
 import WordlistModal from '../components/WordlistModal';
+import { useParams } from 'react-router-dom';
 
 export default function Wordlist() {
+  let {userid} = useParams();
   let [search, setSearch] = useState('');
   let [word, setWord] = useState([]);
   let [idx, setIdx] = useState(-1);
+  let [show, setShow] = useState(true);
 
   useEffect(() => {
     setWord([1,2,3,4,5]);
@@ -28,7 +31,7 @@ export default function Wordlist() {
       <div className='background'>
         {1 == 0 ? <LeftBtn></LeftBtn> : null}
         {1 == 0 ? <RightBtn></RightBtn> : null}
-        <div style={{margin: 'auto', justifyContent: 'center'}}>
+        <div className={style.searchTable}>
           <input type="text" className={style.searchInput} onChange={(e) => {setSearch(e.target.value)}} />
           <div className={style.searchBtn}>
             <FaSearch size={30} />

@@ -1,8 +1,12 @@
+import '../App.css'
 import style from '../style/quizresult.module.css';
 import Logo from '../components/Logo';
 import ProfileImage from '../components/ProfileImage';
+import { useParams } from 'react-router-dom';
 
 export default function QuizResult() {
+  let {quizid} = useParams();
+
   return(
     <div>
       <div>
@@ -10,37 +14,34 @@ export default function QuizResult() {
         <ProfileImage></ProfileImage>
       </div>
 
-      <div>
+      <div className='background'>
         <div>
+          <div style={{float: 'right'}}>날짜</div>  
           <div className={style.bookTitle}>book title</div>
-          <div>날짜</div>
         </div>
 
-        <div>
-          <div className={style.box}>
-            <div>
-              <img src="" alt="책표지" />
-              <h3>책 제목</h3>
-            </div>
+        <div className={style.box}>
+          <div style={{width: '30%', float: 'left'}}>
+            <img src="" alt="책표지" />
+            <h3>책 제목</h3>
+          </div>
 
-            <div>
-              <ol>
-                <li>1</li>
-                <li>1</li>
-                <li>1</li>
-                <li>1</li>
-                <li>1</li>
-                <li>1</li>
-              </ol>
-            </div>
+          <div style={{width: '20%', float: 'left'}}>
+            <ol>
+              <li>1</li>
+              <li>1</li>
+              <li>1</li>
+              <li>1</li>
+              <li>1</li>
+            </ol>
+          </div>
 
-            <div>
-              <img src="" alt="맞춘개수에따른표정" />
-              <h4>맞춘 개수</h4>
-            </div>
+          <div style={{width: '50%', float: 'left'}}>
+            <img src="" alt="맞춘개수에따른표정" />
+            <h4>맞춘 개수</h4>
           </div>
         </div>
-
+       
         <div>
           <div className={style.completeBtn}>완료</div>
         </div>

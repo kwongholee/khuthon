@@ -1,9 +1,10 @@
 import style from '../style/quizstart.module.css';
 import Logo from '../components/Logo';
 import ProfileImage from '../components/ProfileImage';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function QuizStart() {
+  let {bookid} = useParams();
   let navigate = useNavigate();
 
   return(

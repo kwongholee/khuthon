@@ -1,10 +1,18 @@
+.searchTable {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .searchInput {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;  
     width: 587px;
     height: 50px;
+    float: left;
 }
 
 .searchBtn {   
+    float: left;
     cursor: pointer;
     width: 50px;
     height: 50px;

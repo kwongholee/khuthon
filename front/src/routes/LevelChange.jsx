@@ -1,6 +1,9 @@
 import style from '../style/levelchange.module.css';
+import {useParams} from 'react-router-dom';
 
 export default function LevelChange() {
+    let {userid} = useParams();
+
     return(
         <div>
             <div className={style.bookTitle}>

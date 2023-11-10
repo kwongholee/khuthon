@@ -3,8 +3,11 @@ import Logo from "../components/Logo"
 import ProfileImage from "../components/ProfileImage"
 import LeftBtn from '../components/LeftBtn';
 import RightBtn from '../components/RightBtn';
+import {useParams} from 'react-router-dom';
 
 export default function QuizDetail() {
+    let {userid} = useParams();
+
     return(
         <div>
             <div>
