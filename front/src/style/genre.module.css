@@ -35,7 +35,7 @@
     border-radius: 10px;
     border: 5px solid #000;
     background: #FFF;
-
+    cursor: pointer;
     color: #000;
     text-align: center;
     font-family: Inter;
@@ -43,7 +43,46 @@
     font-weight: 700;
 }
 
-/* .genre_button:focus {
-    background-color: #83B099;
+.create_button {
+    width: 500px;
+    height: 100px;
+    border-radius: 10px;
+    background: #E0D2B8;
+    width: 273px;
+    height: 48px;
+    margin-top: 30px;
+    cursor: pointer;
+
+    color: #000;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.create_button:hover {
+    background-color: #6a6663;
     color: white;
-}  */
+} 
+
+.alert_name {
+    color: #FF0101;
+    text-align: center;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-top: 10px;
+    margin-bottom: 0
+}
+
+.good_name {
+    color: rgb(5, 195, 24);
+    text-align: center;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-top: 10px;
+    margin-bottom: 0
+}
