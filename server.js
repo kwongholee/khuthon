@@ -170,7 +170,6 @@ app.get('/mypage/:userid', (req,res)=>{
   db.collection('user').findOne({id:req.params.userid}, (err,res2)=>{
     result  = res2
     lang = result.lang
-    
     let level;
     bookArray=[]
     if (result.book != null){
@@ -246,7 +245,7 @@ app.get('/wordlist/:userid/:bookid', (req, res)=>{
   })
 })
 
-app.post('/quiz/result/:quizid', (req, res)=>{
+app.post('/quiz/result', (req, res)=>{
   now = new Date();
   year = now.getFullYear();
   month = now.getMonth() + 1;
@@ -260,6 +259,7 @@ app.post('/quiz/result/:quizid', (req, res)=>{
     "rightNum" : req.body.rightNum,
     "totalNum" : req.body.totalNum,
     "wordList" : req.body.result,
+    "userId": req.user.id,
     "date" : date,
     "lang" : lang,
     "bookId" : req.body.bookId
@@ -373,7 +373,7 @@ app.post('/book/word/:userid/:bookid',async (req,res)=>{
           lang : "kor",
           bookId: req.params.bookid,
           userId : req.params.userid,
-          level : int(total/totalNum),
+          level : total/totalNum,
           testNum : 0
         })
       }

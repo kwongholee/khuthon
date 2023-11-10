@@ -10,19 +10,21 @@ export default function WordlistModal() {
 
     return(
         <div>
-            <div>
+            <div style={{borderRight: '#D3D3D3 1px solid', borderLeft: "#D3D3D3 1px solid"}}>
                 <div style={{float: 'right', marginRight: '10px', cursor: 'pointer'}} onClick={() => {
                     dispatch(closeModal());
                 }}>닫기</div>
                 <h2 style={{textAlign: 'left', marginLeft: '20px'}}>단어</h2>
                 <div><AiOutlineSound style={{cursor: 'pointer'}} /></div>
+                <hr />
             </div>
             {
                 define.map((a,i) => {
                     return(
-                        <div key={i} style={{textAlign: 'left'}}>
+                        <div key={i} style={{textAlign: 'left', borderRight: '#D3D3D3 1px solid', borderLeft: "#D3D3D3 1px solid"}}>
                             <h3 style={{marginLeft: '20px'}}>{i+1}. {a.definition}</h3>
                             <p style={{marginLeft: '30px'}}>ex. {a.example}</p>
+                            <hr />
                         </div>
                     )
                 })
