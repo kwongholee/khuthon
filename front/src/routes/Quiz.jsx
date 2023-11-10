@@ -2,8 +2,6 @@ import '../App.css'
 import style from '../style/arrow.module.css'
 import WordList from '../components/WordList';
 import Navbar from '../components/Navbar';
-import LeftBtn from '../components/LeftBtn';
-import RightBtn from '../components/RightBtn';
 import { useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -16,15 +14,12 @@ export default function Quiz() {
   let [quiz, setQuiz] = useState([]);
 
   const fetch = async () => {
-    return await axios.get('/quiz/' + userid + "?page=" + searchParams.get("page"))
+    let data =  await axios.get('/quiz/' + userid + "?page=" + searchParams.get("page"))
+    setQuiz(data);
   }
 
   useEffect(() => {
-    let copy = [...quiz];
-    for(let i = 0; i < fetch.wordList.length; i++) {
-      copy.push(fetch.quiz[i]);
-    }
-    setQuiz(copy);
+    fetch();
   }, [])
 
   return(

@@ -11,7 +11,6 @@ const MongoClient = require('mongodb').MongoClient
 const mongodb = require('mongodb');
 const {ObjectId} = require('mongodb')
 const {execSync} = require('child_process')
-const {ObjectId} = require('mongodb')
 const fs = require('fs')
 
 app.use(express.urlencoded({extended: true}))
@@ -245,7 +244,7 @@ app.get('/wordlist/:userid', (req, res)=>{
       console.log(result)
       if (result.length!=0){
         for (i=0; i<result.length; i++){
-          wordArray.push({"word":result[i].word[0], "wordId":result[i]._id, "bookId": result[i].bookId})
+          wordArray.push({"word":result[i].word, "wordId":result[i]._id, "bookId": result[i].bookId})
         }
         res.send({"wordList":wordArray})
       }
@@ -295,7 +294,7 @@ app.post('/quiz/result', (req, res)=>{
 
 app.get('/quiz/:bookid', (req, res)=>{
   db.collection('book').findOne({_id:ObjectId(req.params.bookid)}, (err, result)=>{
-    res.send({"title":result.engTitle, "bookImage":result.bookImage})
+    res.send({"title":result.korTitle, "bookImage":result.bookImage})
   })
 })
 
@@ -472,29 +471,19 @@ app.get('/book/word/:userid/:bookid',(req,res)=>{
   res.send({"time": executionTime})
 })
 
-app.get('/quiz/word/:userid',(req,res)=>{
+app.post('/quiz/word/:userid',(req,res)=>{
   db.collection('book').findOne({_id:ObjectId(req.body.bookId)},(err,result)=>{
-    inputArray = []
-    let lang;
-    for(i=0; i<req.body.word.length; i++){
-      db.collection('word').findOne({word:req.body.word[i]},(err,res2)=>{
-        inputArray.push([req.body.word[i],res2.testNum])
-        lang = res2.lang
-      })
-    }
     lang="kor"
     pythonPath = path.resolve(__dirname,`./make_quiz_${lang}.py`)
     let pyResult;
     try {
-      pyResult = execSync(`python3 ${pythonPath} '${JSON.stringify(inputArray)}'`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
+      pyResult = execSync(`python ${pythonPath} '${JSON.stringify(req.body.word)}'`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
       pyResult = pyResult.trim()
       pyResult = eval(pyResult)
       res.send({"quiz":pyResult, "bookId":req.body.bookId, "bookImage":result.bookImage})
     } catch (error) {
         console.error('에러:', error.message);
     }
-    quizArray = [["hi", "a"], ["hi", "b"], ["hi", "c"]]
-    res.send({"quiz":quizArray, "bookId": req.body.bookId, "bookImage": result.bookImage})
   })
 })
 
