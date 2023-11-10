@@ -10,6 +10,7 @@ const app = express();
 const MongoClient = require('mongodb').MongoClient
 const mongodb = require('mongodb');
 const {execSync} = require('child_process')
+const fs = require('fs')
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
@@ -39,7 +40,7 @@ MongoClient.connect(process.env.DB,{useUnifiedTopology: true}, function(err, cli
     })
 })
 
-app.get('/main',(req, res)=>{
+app.get('/main/:userid',(req, res)=>{
   db.collection('user').findOne({id:req.user.id}, (err,result)=>{
     res.send(result)
   })
@@ -55,7 +56,7 @@ app.get('/login/redirect', passport.authenticate('google'), async (req, res) => 
         res.redirect(`/register/profile/${req.user.id}`)
       }
       else{
-        res.redirect('/mainpage')
+        res.redirect(`/mainpage/${req.user.id}`)
       }
     })
   } catch (err) {
@@ -66,7 +67,9 @@ app.get('/login/redirect', passport.authenticate('google'), async (req, res) => 
 
 app.get('/authorization',(req,res)=>{
   if (req.user){
-    res.send({isLogined: "Logined", userid: req.user.id})
+    db.collection('user').findOne({id:req.user.id}, (err,result)=>{
+      res.send({isLogined: "Logined", userid: req.user.id, profileImage : result.profileImage})
+    })
   }
   else{
     res.send({isLogined: "Not Logined", userid: null, image : null})
@@ -158,27 +161,52 @@ app.get('/logout', (req, res, next) => {
       console.log('로그아웃됨')
     }
   });
+  req.session.destroy()
+  res.clearCookie('connect.sid');
+  res.send("Logged Out")
 });
 
 app.get('/mypage/:userid', (req,res)=>{
   db.collection('user').findOne({id:req.params.userid}, (err,res2)=>{
     result  = res2
-    book = result.book
-    bookArray = []
-    for (i=0; i<book.length; i++){
-      db.collection('book').findOne({id:book[i]}, (err, res2)=>{
-        foundBook = res2
-      })
-      bookArray.push({
-        "bookId" : book[i].bookId,
-        "title" : foundBook.title,
-        "date": book[i].date,
-        "bookImage" :foundBook.bookImage
-      })
+    lang = result.lang
+    
+    let level;
+    bookArray=[]
+    if (result.book != null){
+      book = result.book
+      for (i=0; i<book.length; i++){
+        db.collection('book').findOne({id:book[i]}, (err, res2)=>{
+          foundBook = res2
+          if(lang=='eng'){
+            title =foundBook.engTitle
+            if(result.engLevel==null){
+              level = null
+            }
+            else{
+              level = result.engLevel
+            }
+          }
+          else{
+            if(result.korLevel==null){
+              level = null
+            }
+            else{
+              level = result.korLevel
+            }
+          }
+        })
+        bookArray.push({
+          "bookId" : book[i].bookId,
+          "title" : title,
+          "date": book[i].date,
+          "bookImage" :foundBook.bookImage
+        })
+      }
     }
-    db.collection('quiz').find({userId: req.params.userid}).limit(2).toArray((err,res3)=>{
+    db.collection('quiz').find({userId: req.params.userid, lang: lang}).limit(2).toArray((err,res3)=>{
       quizArray = res3
-      db.collection('word').find({userId: req.params.userid}).limit(6).toArray((err,res4)=>{
+      db.collection('word').find({userId: req.params.userid, lang: lang}).limit(6).toArray((err,res4)=>{
         wordArray = res4.map(doc => doc.word)
         res.send({
           "user": {
@@ -186,7 +214,7 @@ app.get('/mypage/:userid', (req,res)=>{
             "profileImage":result.profileImage,
             "age" : result.age,
             "lang" : result.lang,
-            "level" : result.level,
+            "level" : level,
             "userId" : result.id
           },
           "book": bookArray,
@@ -198,13 +226,17 @@ app.get('/mypage/:userid', (req,res)=>{
   })
 })
 
-app.get('/wordlist/:userid', (req, res)=>{
+app.get('/wordlist/:userid/:bookid', (req, res)=>{
+  let lang;
+  db.collection('user').findOne({id:req.params.userid}, (err, (result)=>[
+    lang = res2.lang
+  ]))
   page = int(req.query.page)
-  db.collection('word').find({userId: req.params.userid}).skip((page-1)*10).limit(10).toArray((err,result)=>{
+  db.collection('word').find({userId: req.params.userid, lang:lang, bookId: req.params.bookid}).skip((page-1)*10).limit(10).toArray((err,result)=>{
     wordArray = []
     if (result.length!=0){
       for (i=0; i<result.length; i++){
-        wordArray.push({"word":result[i].word[0], "wordId":result[i]._id})
+        wordArray.push({"word":result[i].word[0], "wordId":result[i]._id, "bookId": result[i].bookId})
       }
       res.send({"wordList":wordArray})
     }
@@ -214,20 +246,36 @@ app.get('/wordlist/:userid', (req, res)=>{
   })
 })
 
-app.put('/quiz/result/:quizid', (req, res)=>{
-now = new Date();
-year = now.getFullYear();
-month = now.getMonth() + 1;
-day = now.getDate();
-date = (`${year}-${month}-${day}`);
-  db.collection('quiz').updateOne({_id: req.params.quizid},{$set: {
+app.post('/quiz/result/:quizid', (req, res)=>{
+  now = new Date();
+  year = now.getFullYear();
+  month = now.getMonth() + 1;
+  day = now.getDate();
+  date = (`${year}-${month}-${day}`);
+  let lang;
+  db.collection('user').findOne({id:req.user.id},(err,result)=>{
+    lang = result.lang
+  })
+  db.collection('quiz').insertOne({
     "rightNum" : req.body.rightNum,
     "totalNum" : req.body.totalNum,
     "wordList" : req.body.result,
-    "date" : date
-  }}, (err, result)=>{
-    if (err) throw err
-})
+    "date" : date,
+    "lang" : lang,
+    "bookId" : req.body.bookId
+    })
+  for(i=0; i<req.body.result.length; i++){
+    word = req.body.result[i].word
+    right = req.body.result[i].right
+    if (right==false){
+      db.collection('word').updateOne({word:word}, {$inc: {testNum:1}})
+    }
+    else{
+      db.collection('word').deleteOne({word:word}, (err,res2)=>{
+        if (err) throw err
+      })
+    }
+  }
 })
 
 app.get('/quiz/:bookid', (req, res)=>{
@@ -247,7 +295,8 @@ app.get('/quiz/:userid', (req,res)=>{
           quizArray.push({
             "date" : result[i].date,
             "title" : result2.title,
-            "wordList" : result[i].wordList
+            "wordList" : result[i].wordList,
+            'bookId': result2.bookId
           })
         })
       }
@@ -290,42 +339,129 @@ app.post('/book', (req,res)=>{
   res.status(200)
 })
 
-app.post('/book/word/:userid/:bookid',(req,res)=>{
-  //wordList = req.body.wordList
-  lang = "eng"
-  wordList = ["휴대폰이","질렸다","어떻게","어둠을","세상아"]
+app.post('/book/word/:userid/:bookid',async (req,res)=>{
+  let lang;
+  db.collection('user').findOne({id:req.params.userid},(req,result)=>{
+    lang = result.lang
+  })
+  wordList = req.body.wordList
   if(wordList.length==0 || wordList.length>10){
     res.status(400)
   }
   else{
-    for(i=0; i<wordList.length; i++){
       if(lang=="kor"){
-        pythonPath = path.resolve(__dirname,'./morpheme_kor.py')
-        try {
-          const result = execSync(`python ${pythonScriptPath} ${wordList}`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
-          const [stdout, stderr] = result.trim().split('\n');
-          console.log('Python 표준 출력:', stdout);
-          console.error('Python 표준 에러:', stderr);
-        } catch (error) {
-            console.error('에러:', error.message);
-        }
+      pythonPath = path.resolve(__dirname,'./morpheme_kor.py')
+      let result;
+      try {
+        result = execSync(`python3 ${pythonPath} '${JSON.stringify(wordList)}'`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
+        result = result.trim()
+        result = eval(result)
+        console.log(result)
+      } catch (error) {
+          console.error('에러:', error.message);
       }
-      db.collection('word').insertOne({
-        word: wordList[i],
-        bookId: req.params.bookid,
-        userId : req.params.userid,
-        level : ""
-      })
+      for(i=0; i<wordList.length; i++){
+        let total = 0, totalNum=0
+        for (j=0; j<result[i].length; j++){
+          if(result[i][j][1]!=-1){
+            total+=result[i][j][1]
+            totalNum +=1
+          }
+        }
+        db.collection('word').insertOne({
+          word: wordList[i],
+          lang : "kor",
+          bookId: req.params.bookid,
+          userId : req.params.userid,
+          level : int(total/totalNum),
+          testNum : 0
+        })
+      }
+    }
+    else{
+      pythonPath = path.resolve(__dirname,'./morpheme_eng.py')
+      let result;
+      try {
+        result = execSync(`python3 ${pythonPath} '${JSON.stringify(wordList)}'`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
+        result = result.trim()
+        result = eval(result)
+        for(i=0; i<wordList.length; i++){
+          const options = {
+            method: 'GET',
+            url: `https://wordsapiv1.p.rapidapi.com/words/${result[i]}/frequency`,
+            headers: {
+              'X-RapidAPI-Key': '8ab9d90422msh45535b94ba1a1a9p192899jsn3d0ceb2ac5d3',
+              'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com'
+            }
+          };
+          try {
+            const response = await axios.request(options);
+            let freq = response.data.frequency.perMillion
+            db.collection('word').insertOne({
+              word: wordList[i],
+              lang : "eng",
+              bookId: req.params.bookid,
+              userId : req.params.userid,
+              level : freq
+            })
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      } catch (error) {
+          console.error('에러:', error.message);
+      }
     }
   }
 })
 
-app.get('/book/word/{userid}/{bookid}',(req,res)=>{
+app.get('/book/word/:userid/:bookid',(req,res)=>{
   var endTime = new Date();
   var executionTime = endTime - startTime;
   var executionTimeInSeconds = executionTime / 1000; //초
   var executionTimeInMinutes = executionTime / (1000 * 60);//분
   res.send({"time": executionTime})
+})
+
+app.get('/test',(err,res)=>{
+  lang="eng"
+  inputArray=[["minah",0],["hamster",3],["water",2],["bottle",0],["hello",0],["handkerchief",0]]
+  pythonPath = path.resolve(__dirname,`./make_quiz_${lang}.py`)
+  let result;
+  try {
+    result = execSync(`python3 ${pythonPath} '${JSON.stringify(inputArray)}'`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
+    result = result.trim()
+    result = eval(result)
+    console.log(result)
+  } catch (error) {
+      console.error('에러:', error.message);
+  }
+})
+
+app.post('/quiz/word/:userid',(req,res)=>{
+  db.collection('book').findOne({_id:req.body.bookId},(err,result)=>{
+    inputArray = []
+    let lang;
+    // for(i=0; i<req.body.word.length; i++){
+    //   db.collection('word').findOne({word:req.body.word[i]},(err,res2)=>{
+    //     inputArray.push([req.body.word[i],res2.testNum])
+    //     lang = res2.lang
+    //   })
+    // }
+    lang="eng"
+    inputArray=[["apple",0],["hamster",3],["water",2],["bottle",0],["hello",0],["handkerchief",0]]
+    pythonPath = path.resolve(__dirname,`./make_quiz_${lang}.py`)
+    let pyResult;
+    try {
+      pyResult = execSync(`python3 ${pythonPath} '${JSON.stringify(inputArray)}'`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
+      pyResult = pyResult.trim()
+      pyResult = eval(pyResult)
+      console.log(pyResult)
+    } catch (error) {
+        console.error('에러:', error.message);
+    }
+    res.send({"quiz":quizArray, "bookId":bookId, "bookImage":bookImage})
+  })
 })
 
 function register(data){
@@ -334,7 +470,8 @@ function register(data){
     name : "",
     profileImage : 0,
     age : 0,
-    level : null,
+    engLevel : null,
+    korLevel: null,
     lang : null,
     genre : [],
     levelBook: [],

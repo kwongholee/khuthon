@@ -126,7 +126,7 @@ export default function Genre() {
 
                 
                     await axios.put(`/register/genre/${userId}`, updatedGenre);
-                    navigate(`/mainpage`);
+                    navigate(`/mainpage/${userId}`);
             } catch (err) {
                 console.error(err);
             }
