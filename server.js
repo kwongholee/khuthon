@@ -225,13 +225,13 @@ app.get('/mypage/:userid', (req,res)=>{
   })
 })
 
-app.get('/wordlist/:userid/:bookid', (req, res)=>{
+app.get('/wordlist/:userid', (req, res)=>{
   let lang;
   db.collection('user').findOne({id:req.params.userid}, (err, (result)=>[
     lang = res2.lang
   ]))
   page = int(req.query.page)
-  db.collection('word').find({userId: req.params.userid, lang:lang, bookId: req.params.bookid}).skip((page-1)*10).limit(10).toArray((err,result)=>{
+  db.collection('word').find({userId: req.params.userid, lang:lang}).skip((page-1)*10).limit(10).toArray((err,result)=>{
     wordArray = []
     if (result.length!=0){
       for (i=0; i<result.length; i++){
@@ -460,6 +460,7 @@ app.post('/quiz/word/:userid',(req,res)=>{
     } catch (error) {
         console.error('에러:', error.message);
     }
+    quizArray = [["hi", "a"], ["hi", "b"], ["hi", "c"]]
     res.send({"quiz":quizArray, "bookId":bookId, "bookImage":bookImage})
   })
 })
