@@ -8,7 +8,7 @@ import useSelector, { useDispatch } from 'react-redux'
 
 export default function Main() {
   let navigate =  useNavigate();
-
+  
   const recommend_books = [
     { title: '책 제목 1' },
     { title: '책 제목 2' },

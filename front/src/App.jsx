@@ -17,7 +17,7 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path='/' element={<Login></Login>}></Route>      
+        <Route path='/' element={<Login></Login>}></Route>
         <Route path='/main' element={<Main></Main>}></Route>      
         <Route path='/mypage/:userid' element={<MyPage></MyPage>}></Route>
         <Route path='/register/profile/:userid' element={<Register></Register>}></Route>
