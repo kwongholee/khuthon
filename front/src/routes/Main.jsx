@@ -5,7 +5,7 @@ import LeftBtn from '../components/LeftBtn'
 import RightBtn from '../components/RightBtn'
 import { useNavigate } from 'react-router-dom';
 import {useSelector,  useDispatch } from 'react-redux'
-import { setLang, setUserId } from '../redux/user';
+import { setImage, setLang, setUserId } from '../redux/user';
 import { addRecentBook } from '../redux/recentBook';
 import { useEffect } from 'react';
 
@@ -15,6 +15,8 @@ export default function Main() {
 
   let userId = useSelector((state) => state.user.userId);
   let lang = useSelector((state) => state.user.lang);
+  let image = useSelector((state) => state.user.image);
+
   let recentBook = useSelector((state) => state.recentBook);
   let bookId = recentBook.boodId
   let book = []
@@ -56,9 +58,11 @@ export default function Main() {
     try {
       const response = await axios.get(`/mypage/${userId}`);
       const serverLang = response.data.user.lang
+      const serverImage = response.data.user.profileImage
       const serverRecentBook = response.data.book
       dispatch(setLang(serverLang));
       dispatch(addRecentBook(serverRecentBook));
+      dispatch(setImage(serverImage))
       console.log(recentBook)
     } catch (error) {
       console.error(error);
@@ -77,7 +81,9 @@ export default function Main() {
             <Logo></Logo>
           </div>
             <div id='사진, 언어, 로그아웃' className={style.profile}>
-              <div id='프로필' className={style.profile_left}></div>
+              <div id='프로필' className={style.profile_left}>
+                <img src={'/profile-' + image + '.png'} className={style.profile_image}></img>
+              </div>
               <div id='언어, 로그아웃' className={style.profile_right}>
                 <select className={style.select_language} onChange={onSelect}>
                   <option>한국어</option>

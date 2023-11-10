@@ -92,11 +92,17 @@ h1 {
   background-color: white;
   display: flex;
 }
+.profile_image {
+  width: 70%;
+  height: 100%;
+}
 
 .profile_left {
   width: 135px;
   height: 135px;
-  background-color: whitesmoke;
+  background-color: #f2f2f2;
+  display: flex;
+  justify-content: center;
 }
 
 .profile_right {

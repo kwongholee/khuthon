@@ -4,14 +4,18 @@ import Logo from '../components/Logo';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import {setUserId, setLang} from '../redux/user'
+import {setUserId, setLang, setImage} from '../redux/user'
 
 
 export default function Register() {
 
   const regexName = /^[가-힣a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ]{1,10}$/
 
-  let user = useSelector((state) => state.user)
+  let user = useSelector((state) => state.user);
+  let imageidx = [1, 2, 3 ,4]
+  let [image, setImage] = useState(0)
+  
+
   let [nickname, setNickname] = useState('')
   let [age, setAge] = useState('')
   // let [language, setLanguage] = useState('')
@@ -22,6 +26,8 @@ export default function Register() {
 
   const fetchUserId = async () => {
     try {
+      // console.log(window.innerWidth)
+      // console.log(window.innerHeight)
       const response = await axios.get('/authorization');
       const serverUserId = response.data.userid;
       dispatch(setUserId(serverUserId));
@@ -41,7 +47,17 @@ export default function Register() {
       <Logo></Logo>
       <div style={{display:'flex', justifyContent:'center', alignItems:'center', flexDirection:'column'}}>
         <div className={style.profile_container}>
-          <img className={style.profile}></img>
+            {imageidx.map((a,i) => {
+              return (
+                <div>
+                  <img src={'/profile-' + a + '.png'} className={style.profile}
+                    onClick={() => {
+                      setImage(a)
+                      console.log(a)
+                    }}></img>
+                </div>
+              )
+            }) }
         </div>
         <div className={style.name_container}>
           <input className={style.input_name} placeholder='닉네임을 입력하세요.'
@@ -95,7 +111,7 @@ export default function Register() {
                 name : nickname,
                 age : age,
                 lang : user.lang,
-                button: 'next'
+                profileImage : image
               }
               console.log(newUser)
               axios.put(`/register/profile/${user.userId}`, newUser)

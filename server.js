@@ -124,7 +124,8 @@ app.put('/register/profile/:userid',(req, res)=>{
               {
                 name : req.body.name,
                 age : req.body.age,
-                lang : req.body.lang
+                lang : req.body.lang,
+                profileImage : req.body.profileImage
               }
               })
               res.status(200).send("프로필 생성 완료!")
