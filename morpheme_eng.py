@@ -38,8 +38,9 @@ def lemmatize_word(content):
 
     return ' '.join(lemmatized_words)
 
-input_json = sys.argv[1]
-input_array = json.loads(input_json)
+# input_json = sys.argv[1]
+# input_array = json.loads(input_json)
+input_array = ["apples", "learning"]
 result = [[lemmatize_word(word)] for word in input_array]
 
 print(result)

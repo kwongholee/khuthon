@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import {useSelector,  useDispatch } from 'react-redux'
 import { setImage, setLang, setUserId } from '../redux/user';
 import { addRecentBook } from '../redux/recentBook';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { setPosition } from '../redux/page';
 
 export default function Main() {
@@ -23,7 +23,8 @@ export default function Main() {
 
   let recentBook = useSelector((state) => state.recentBook);
   let bookId = recentBook.boodId
-  let book = []
+  let [books, setBooks] = useState([])
+  // let books = []
 
   const recommend_books = [
     { title: '책 제목 1' },
@@ -77,9 +78,21 @@ export default function Main() {
       console.error(error);
     }
   };  
+
+  const fetchBooks = async () => {
+    try {
+      const response = await axios.get(`/main`);
+      let serverBooks = response.data.book
+      setBooks(serverBooks)
+      console.log(books)
+    } catch (error) {
+      console.error(error);
+    }
+  };  
   
   useEffect(() => {
     fetchUserInfo()
+    fetchBooks()
   }, [])
 
   return (
@@ -180,15 +193,14 @@ export default function Main() {
           <LeftBtn className={style.left_icon}></LeftBtn>
           <RightBtn className={style.right_icon}></RightBtn>
           <div className={style.book_list}>
-            {
-              book_list.map((book, index) => (
-                  <div key={index} className={style.book_container}>
-                    <div className={style.book}></div>
-                    <p className={style.book_title}>{book.title}</p>
-                  </div>
-                ))
-            }
-          </div>   
+            {books.slice(0, 5).map((book, index) => (
+              <div key={index} className={style.book_container}>
+                <img className={style.book_image} src={books[index].bookImage} alt={books[index].korTitle} />
+                <p className={style.book_title}>{books[index].korTitle}</p>
+              </div>
+            ))}
+
+            </div> 
         </div>
     </div>
   )
