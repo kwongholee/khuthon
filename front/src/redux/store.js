@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { showModal } from './showModal'
+import {word} from './makeQuiz'
+import {show} from './showModal'
 
-export default configureStore({
+export const store = configureStore({
   reducer: {
-    showModal
-   }
-}) 
+    word: word.reducer,
+    show: show.reducer
+  }
+})

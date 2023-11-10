@@ -1,3 +1,4 @@
 .background {
     background: linear-gradient(to bottom right, rgba(241, 245, 221, 0.00) 0%, rgba(182, 165, 135, 0.20) 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, rgba(241, 245, 221, 0.00) 0%, rgba(182, 165, 135, 0.20) 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, rgba(241, 245, 221, 0.00) 0%, rgba(182, 165, 135, 0.20) 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, rgba(241, 245, 221, 0.00) 0%, rgba(182, 165, 135, 0.20) 50%) top right / 50% 50% no-repeat;
+    height: 100%;
 }
