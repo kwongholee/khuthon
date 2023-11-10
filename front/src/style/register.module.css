@@ -8,14 +8,18 @@
 }
 
 .profile_container {
-    width: 600px;
+    width: 700px;
+    height: 300px;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
 }
 .profile {
-    width: 248px;
-    height: 248px;
+    /* width: 162px;
+    height: 236px; */
+    width: 80%;
+    height: 80%;
+    margin: 0 10px;
 }
 
 .name_container {
