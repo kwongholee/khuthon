@@ -198,8 +198,7 @@ export default function Main() {
                 <p className={style.book_title}>{books[index].korTitle}</p>
               </div>
             ))}
-
-            </div> 
+          </div> 
         </div>
     </div>
   )

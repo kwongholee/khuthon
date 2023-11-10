@@ -10,6 +10,7 @@ export default function MyPage() {
   let image = useSelector((state) => state.user.image);
   let userId = useSelector((state) => state.user.userId);
   let navigate = useNavigate()
+  let [books, setBooks] = useState([])
   let [userInfo, setUserInfo] = useState({
     name : '',
     age : '',
@@ -55,8 +56,21 @@ export default function MyPage() {
     }
   };
 
+  const fetchBooks = async () => {
+    try {
+      const response = await axios.get(`/main`);
+      let serverBooks = response.data.book
+      setBooks(serverBooks)
+      console.log(books)
+    } catch (error) {
+      console.error(error);
+    }
+  };  
+  
+ 
   useEffect(() => {
     fetchLevel()
+    fetchBooks()
   }, [])
   
   return(
@@ -84,15 +98,13 @@ export default function MyPage() {
           <LeftBtn className={style.left_icon}></LeftBtn>
           <RightBtn className={style.right_icon}></RightBtn>
           <div className={style.recommend_book}>
-            {
-              recent_books.map((book, index) => (
-                <div key={index} className={style.book_container}>
-                  <div className={style.book}></div>
-                  <p className={style.book_title}>{book.title}</p>
-                </div>
-              ))
-            }
-          </div>   
+            {books.slice(0, 5).map((book, index) => (
+              <div key={index} className={style.book_container}>
+                <img className={style.book_image} src={books[index].bookImage} alt={books[index].korTitle} />
+                <p className={style.book_title}>{books[index].korTitle}</p>
+              </div>
+            ))}
+          </div>  
         </div>
         <div className={style.second_container}>
           <div>
