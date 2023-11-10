@@ -43,7 +43,10 @@ MongoClient.connect(process.env.DB,{useUnifiedTopology: true}, function(err, cli
 
 app.get('/main/:userid',(req, res)=>{
   db.collection('user').findOne({id:req.user.id}, (err,result)=>{
-    res.send(result)
+    lang = result.lang
+    db.collection('book').find().toArray((err,result2)=>{
+      res.send({"user": result, "book": result2 })
+    })
   })
 })
 
