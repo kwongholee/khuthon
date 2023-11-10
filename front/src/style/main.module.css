@@ -206,10 +206,14 @@ h3 {
   color: #000;
   font-size: 30px;
   font-weight: 700;
-
   margin-bottom : 20px;
   float: right
 }
+
+.read_button:hover {
+  background-color: #83B099;
+  color: white;
+} 
 
 .list_container {
   position: relative;

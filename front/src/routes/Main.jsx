@@ -16,6 +16,8 @@ export default function Main() {
   let userId = useSelector((state) => state.user.userId);
   let lang = useSelector((state) => state.user.lang);
   let recentBook = useSelector((state) => state.recentBook);
+  let bookId = recentBook.boodId
+  let book = []
 
   const recommend_books = [
     { title: '책 제목 1' },
@@ -31,7 +33,13 @@ export default function Main() {
     { title: '책 제목 4' },
     { title: '책 제목 5' },
   ];
-
+  const onSelect = (e) => {
+    console.log(e.target.value)
+    if (e.target.value == '한국어')
+      dispatch(setLang('kor'))
+    else
+      dispatch(setLang('eng'))
+  }
   const fetchUserId = async () => {
     try {
       const response = await axios.get('/authorization');
@@ -55,19 +63,8 @@ export default function Main() {
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const fetchMain = async () => {
-    try {
-      const response = await axios.get('/main');
-      console.log('good')
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+  };  
   useEffect(() => {
-    fetchMain()
     fetchUserId()
     fetchUserInfo()
   }, [])
@@ -82,7 +79,7 @@ export default function Main() {
             <div id='사진, 언어, 로그아웃' className={style.profile}>
               <div id='프로필' className={style.profile_left}></div>
               <div id='언어, 로그아웃' className={style.profile_right}>
-                <select className={style.select_language}>
+                <select className={style.select_language} onChange={onSelect}>
                   <option>한국어</option>
                   <option>영어</option>
                 </select>
@@ -118,7 +115,18 @@ export default function Main() {
                     <p className={style.recent_book_content}>{recentBook[recentBook.length-1].date}</p>
                   </div>
               </div>
-              <button className={style.read_button}>마저 읽기</button>
+              <button className={style.read_button}
+                onClick={() => {
+                  axios.post('/book')
+                  .then(res => {
+                    navigate(`/book/${bookId}`)
+                  })
+                  .catch(err => {
+                    console.log(err)
+                  })
+                }}
+              
+              >마저 읽기</button>
             </div>
           )
           }
