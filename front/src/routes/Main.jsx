@@ -1,7 +1,8 @@
 import style from '../style/main.module.css';
 import axios from "axios"
 import Logo from '../components/Logo';
-import {HiArrowCircleLeft, HiArrowCircleRight} from 'react-icons/hi'
+import LeftBtn from '../components/LeftBtn'
+import RightBtn from '../components/RightBtn'
 
 
 //userid 묻는 get 요청 하나 쏘기, 등록하면 post도 쏘기
@@ -43,14 +44,14 @@ export default function Main() {
       </div>
         <div className={style.list_container}>
           <div className={style.list_title}>이런 책은 어떠세요?</div>
-          <HiArrowCircleLeft className={style.left_icon} />
-          <HiArrowCircleRight className={style.right_icon}/>
+          <LeftBtn className={style.left_icon}></LeftBtn>
+          <RightBtn className={style.right_icon}></RightBtn>
           <div className={style.recommend_book}></div>   
         </div>
         <div className={style.list_container}>
           <div className={style.list_title}>책 목록</div>
-          <HiArrowCircleLeft className={style.left_icon}/>
-          <HiArrowCircleRight className={style.right_icon}/>
+          <LeftBtn className={style.left_icon}></LeftBtn>
+          <RightBtn className={style.right_icon}></RightBtn>
           <div className={style.book_list}></div>   
         </div>
     </div>

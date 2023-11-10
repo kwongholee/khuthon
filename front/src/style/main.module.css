@@ -144,24 +144,6 @@ h1 {
   margin-top: 31px ;
 }
 
-.left_icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-680%, -10%);
-  width: 100px;
-  height: 100px;
-}
-
-.right_icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(580%, -10%);
-  width: 100px;
-  height: 100px;
-}
-
 .recommend_book {
   width: 1269px;
   height: 204px;
